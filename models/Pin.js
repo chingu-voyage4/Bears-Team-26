@@ -3,8 +3,8 @@ let Schema = mongoose.Schema;
 let User = require('./User')
 let pinSchema = new Schema({
 
-    likes: [User.schema],
-    shares: [User.schema],
+    likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],//Only store the ID of the liked and shared users.
+    shares: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     title: String,
     imageURL: String,
     description: String,
