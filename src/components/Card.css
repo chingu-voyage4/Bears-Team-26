@@ -1,0 +1,20 @@
+.card {
+  width: 80%;
+  height: 20%;
+  min-width: 120px;
+  min-height: 250px;
+  margin: 20px 5px 20px 5px;
+  border: 1px hidden;
+  background-color: white;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 10px;
+}
+
+@media (min-width: 480px) {
+  .card {
+    max-width: 200px;
+    width: 40%;
+  }
+}
