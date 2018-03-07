@@ -12,7 +12,6 @@ const LikeButton = styled.button`
   color: white;
   font-family: "Alegreya", serif;
   font-weight: bold;
-  z-index: 100;
   width: 40px;
   height: 21px;
 `;
@@ -28,20 +27,13 @@ const ShareButton = styled.button`
   height: 21px;
 `;
 
-function handleLike(event) {
-  alert("TODO: Add Like events");
-  event.stopPropagation();
-}
-
-function handleShare(event) {
-  alert("TODO: Add Share events");
-  event.stopPropagation();
-}
-
 class Card extends Component {
   constructor(props) {
     super(props);
     this.handleMouseHover = this.handleMouseHover.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleShare = this.handleShare.bind(this);
+    this.handleLike = this.handleLike.bind(this);
     this.state = {
       isHovering: false
     };
@@ -61,6 +53,16 @@ class Card extends Component {
     alert("TODO: Add links");
   }
 
+  handleShare(event) {
+    alert("TODO: Add Share events");
+    event.stopPropagation();
+  }
+
+  handleLike(event) {
+    alert("TODO: Add Like events");
+    event.stopPropagation();
+  }
+
   render() {
     return (
       <div
@@ -72,10 +74,10 @@ class Card extends Component {
       >
         {this.state.isHovering ? (
           <span>
-            <ShareButton onClick={handleShare}>
+            <ShareButton onClick={this.handleShare}>
               <img src={share} height="100%" alt="Share!" />
             </ShareButton>
-            <LikeButton onClick={handleLike}>Like!</LikeButton>
+            <LikeButton onClick={this.handleLike}>Like!</LikeButton>
           </span>
         ) : null}
       </div>
