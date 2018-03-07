@@ -13,6 +13,7 @@ let users = require('./routes/users');
 let boards = require('./routes/boards');
 let auth = require('./routes/auth');
 let me = require('./routes/me');
+let pins = require('./routes/pins');
 let app = express();
 
 let mongoose = require('mongoose');
@@ -89,7 +90,8 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/boards', boards);
 app.use('/auth', auth);
-app.use('/me', me)
+app.use('/me', me);
+app.use('/pins', pins);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
