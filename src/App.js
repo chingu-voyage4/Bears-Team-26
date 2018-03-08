@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Flexbox from './flexbox';
+import Flexbox from './components/Flexbox';
 const App = () => {
   return (
     <div>
