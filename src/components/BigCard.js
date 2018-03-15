@@ -68,15 +68,28 @@ const PostedSpan = styled.span`
 const CommentsBox = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow-y: scroll;
   justify-content: flex-start;
+  height: 60%;
 `;
 
-const CommentLine = styled.div`
-  height: 30px;
+const CommentLine = styled.span`
   width: 90%;
-  padding-left: 20px;
+  display: inline-block;
+  text-overflow: ellipsis;
+  box-shadow: 0 0 1px #7a8c8f;
+  margin: 5px 0 5px 7.5%;
+  border-radius: 5px;
+  font-family: "Alegreya", serif;
 `;
+
+function CommentDiv (comment) {
+  let commenter = Object.entries(comment)[0][0]
+  let commentText = Object.entries(comment)[0][1];
+  return(
+    <CommentLine>{commenter} says "{commentText}"</CommentLine>
+  );
+};
 
 class BigCard extends Component {
   constructor(props) {
@@ -117,21 +130,11 @@ class BigCard extends Component {
     };
   }
 
-  renderComments() {
-    let string = "";
-    for (let commenter in this.props.comments) {
-      string += `<CommentLine>${commenter} \"${
-        this.props.comments[commenter]
-      }\"</CommentLine>`;
-    }
-    return string;
-  }
-
   render() {
     return (
       <div
         className="bigCard"
-        style={{ height: this.state.commentsVisible ? "1150px" : null }}
+        style={{ height: this.state.commentsVisible ? "950px" : null }}
       >
         <span>
           <BigShareButton onClick={this.handleShare}>
@@ -151,9 +154,9 @@ class BigCard extends Component {
             {this.commentCount} Comments
             <ViewMore onClick={this.handleCommentClick}>...</ViewMore>
           </CommentsSpan>
-          {this.state.commentsVisible ? this.renderComments() : null}
+          {this.state.commentsVisible ? <CommentsBox> {this.props.comments.map((comment, i) => <CommentDiv key={i} {...comment}/>)}</CommentsBox> : null}
         </CommentsBar>
-        <PostedSpan>Posted By {this.props.postedBy}</PostedSpan>
+        <PostedSpan>Posted By {this.props.postedBy} on {this.props.postedOn}</PostedSpan>
       </div>
     );
   }
