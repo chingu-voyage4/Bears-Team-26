@@ -66,7 +66,7 @@ class Card extends Component {
   render() {
     return (
       <div
-        className="card"
+        className={this.state.isHovering ? "card tinted" : "card"}
         onMouseEnter={this.handleMouseHover}
         onMouseLeave={this.handleMouseHover}
         onClick={this.handleClick}
