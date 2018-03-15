@@ -42,7 +42,7 @@ const CommentsSpan = styled.span`
 const ViewMore = styled.button`
   display: inline-block;
   float: right;
-  margin: -5px -20px 0 0;
+  margin: -5px 20px 0 0;
   border-radius: 50%;
   background: rgba(122, 140, 143, 0.6);
   color: #1e2627;
@@ -52,6 +52,10 @@ const ViewMore = styled.button`
   font-weight: bold;
   font-size: 1.1em;
   padding-bottom: 20px;
+
+  @media(min-width: 650px) {
+    margin: -5px -20px 0 0;
+  }
 `;
 
 const PostedSpan = styled.span`
@@ -62,7 +66,11 @@ const PostedSpan = styled.span`
   margin-top: 50px;
   font-size: 1.2em;
   font-family: "Alegreya", serif;
-  padding-left: 80px;
+  padding-left: 7.5%;
+
+  @media(min-width: 600px) {
+    padding-left: 80px;
+  }
 `;
 
 const CommentsBox = styled.div`
