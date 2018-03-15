@@ -1,31 +1,7 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import "./Card.css";
 import share from "./share.png";
-
-const LikeButton = styled.button`
-  border: 1px hidden;
-  border-radius: 25%;
-  float: right;
-  margin: 5px 5px 0 0;
-  background: red;
-  color: white;
-  font-family: "Alegreya", serif;
-  font-weight: bold;
-  width: 40px;
-  height: 21px;
-`;
-
-const ShareButton = styled.button`
-  border: 1px hidden;
-  border-radius: 25%;
-  float: left;
-  margin: 5px 0 0 5px;
-  color: white;
-  background: white;
-  width: 40px;
-  height: 21px;
-`;
+import { LikeButton, ShareButton } from "./Utils.js";
 
 class Card extends Component {
   constructor(props) {
