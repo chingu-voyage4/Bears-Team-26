@@ -3,14 +3,16 @@ import styled from "styled-components";
 const LikeButton = styled.button`
   border: 1px hidden;
   border-radius: 25%;
-  float: right;
-  margin: 5px 5px 0 0;
+  top: 5px;
+  right: 5px;
   background: red;
   color: white;
   font-family: "Alegreya", serif;
   font-weight: bold;
   width: 40px;
   height: 21px;
+  z-index: 100;
+  position: absolute;
 `;
 
 const ShareButton = styled.button`
@@ -22,6 +24,8 @@ const ShareButton = styled.button`
   background: white;
   width: 40px;
   height: 21px;
+  z-index: 100;
+  position: absolute;
 `;
 
 const BigLikeButton = styled.button`
@@ -38,6 +42,11 @@ const BigLikeButton = styled.button`
   height: 35px;
   font-size: 1.2em;
   text-shadow: 1px 2px darkred;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(200, 0, 0, 1);
+  }
 `;
 
 const BigShareButton = styled.button`
