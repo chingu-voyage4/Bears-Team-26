@@ -6,7 +6,8 @@
   margin: auto;
   margin-top: 10px;
   height: 700px;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0);
+  box-shadow: 0 0 8px rgba(122, 140, 143, 0.8);
   border-radius: 10px;
   max-width: 650px;
 }
@@ -24,7 +25,7 @@
   border-radius: 5px;
 }
 
-@media(min-width: 480px) {
+@media (min-width: 480px) {
   .bigPic {
     height: 50%;
     margin-top: 12%;

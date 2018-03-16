@@ -77,11 +77,12 @@ const PostedSpan = styled.span`
   font-size: 1.2em;
   font-family: "Alegreya", serif;
   padding-left: 7.5%;
+  transition: all 0.3s;
 
   @media (min-width: 600px) {
     padding-left: 80px;
   }
-`;
+`; //I didn't realize adding transitions makes resizing the screen more fun
 
 const CommentsBox = styled.div`
   display: flex;
@@ -92,21 +93,22 @@ const CommentsBox = styled.div`
 `;
 
 const CommentLine = styled.span`
-  width: 90%;
+  width: 80%;
   display: inline-block;
   text-overflow: ellipsis;
   box-shadow: 0 0 1px #7a8c8f;
   margin: 5px 0 5px 7.5%;
+  padding: 5px 40px 5px 10px;
   border-radius: 5px;
   font-family: "Alegreya", serif;
+  background: #e5fafd;
 `;
 
 function CommentDiv(comment) {
-  let commenter = Object.entries(comment)[0][0];
-  let commentText = Object.entries(comment)[0][1];
+  const { user, commentText, postedOn } = comment;
   return (
     <CommentLine>
-      {commenter} says "{commentText}"
+      {user} "{commentText}" <br /> on {postedOn.substring(4)}
     </CommentLine>
   );
 }
@@ -134,8 +136,7 @@ class BigCard extends Component {
     event.stopPropagation();
   }
 
-  handleVisit(event) {
-    event.stopPropagation();
+  handleVisit() {
     window.open(this.props.imgUrl, "_blank");
   }
 
@@ -154,11 +155,19 @@ class BigCard extends Component {
     return (
       <div
         className="bigCard"
-        style={{ height: this.state.commentsVisible ? "950px" : null }}
+        style={{
+          transition: "height 0.4s",
+          height: this.state.commentsVisible ? "950px" : null
+        }}
       >
         <span>
           <BigShareButton onClick={this.handleShare}>
-            <img src={share} height="100%" alt="Share!" />
+            <img
+              style={{ transition: "all 0.4s" }}
+              src={share}
+              height="100%"
+              alt="Share!"
+            />
           </BigShareButton>
           <BigLikeButton onClick={this.handleLike}>Like!</BigLikeButton>
         </span>
@@ -168,7 +177,10 @@ class BigCard extends Component {
         />
         <VisitButton onClick={this.handleVisit}>Visit</VisitButton>
         <CommentsBar
-          style={{ height: this.state.commentsVisible ? "300px" : null }}
+          style={{
+            transition: "height 0.4s",
+            height: this.state.commentsVisible ? "300px" : null
+          }}
         >
           <CommentsSpan>
             {this.commentCount} Comments
