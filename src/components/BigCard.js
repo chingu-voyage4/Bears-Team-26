@@ -17,6 +17,11 @@ const VisitButton = styled.button`
   background: #d4e6e8;
   border: 1px hidden;
   color: #1e2627;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #c3d8db;
+  }
 `;
 
 const CommentsBar = styled.div`
@@ -52,9 +57,14 @@ const ViewMore = styled.button`
   font-weight: bold;
   font-size: 1.1em;
   padding-bottom: 20px;
+  transition: all 0.2s;
 
-  @media(min-width: 650px) {
+  @media (min-width: 650px) {
     margin: -5px -20px 0 0;
+  }
+
+  &:hover {
+    background: #b3cbce;
   }
 `;
 
@@ -68,7 +78,7 @@ const PostedSpan = styled.span`
   font-family: "Alegreya", serif;
   padding-left: 7.5%;
 
-  @media(min-width: 600px) {
+  @media (min-width: 600px) {
     padding-left: 80px;
   }
 `;
@@ -91,13 +101,15 @@ const CommentLine = styled.span`
   font-family: "Alegreya", serif;
 `;
 
-function CommentDiv (comment) {
-  let commenter = Object.entries(comment)[0][0]
+function CommentDiv(comment) {
+  let commenter = Object.entries(comment)[0][0];
   let commentText = Object.entries(comment)[0][1];
-  return(
-    <CommentLine>{commenter} says "{commentText}"</CommentLine>
+  return (
+    <CommentLine>
+      {commenter} says "{commentText}"
+    </CommentLine>
   );
-};
+}
 
 class BigCard extends Component {
   constructor(props) {
@@ -162,9 +174,17 @@ class BigCard extends Component {
             {this.commentCount} Comments
             <ViewMore onClick={this.handleCommentClick}>...</ViewMore>
           </CommentsSpan>
-          {this.state.commentsVisible ? <CommentsBox> {this.props.comments.map((comment, i) => <CommentDiv key={i} {...comment}/>)}</CommentsBox> : null}
+          {this.state.commentsVisible ? (
+            <CommentsBox>
+              {this.props.comments.map((comment, i) => (
+                <CommentDiv key={i} {...comment} />
+              ))}
+            </CommentsBox>
+          ) : null}
         </CommentsBar>
-        <PostedSpan>Posted By {this.props.postedBy} on {this.props.postedOn}</PostedSpan>
+        <PostedSpan>
+          Posted By {this.props.postedBy} on {this.props.postedOn}
+        </PostedSpan>
       </div>
     );
   }
