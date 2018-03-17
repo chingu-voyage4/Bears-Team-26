@@ -13,6 +13,11 @@ const LikeButton = styled.button`
   height: 21px;
   z-index: 100;
   position: absolute;
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
 `;
 
 const ShareButton = styled.button`
@@ -26,6 +31,11 @@ const ShareButton = styled.button`
   height: 21px;
   z-index: 100;
   position: absolute;
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
 `;
 
 const BigLikeButton = styled.button`
@@ -47,6 +57,11 @@ const BigLikeButton = styled.button`
   &:hover {
     background: rgba(200, 0, 0, 1);
   }
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
 `;
 
 const BigShareButton = styled.button`
@@ -59,6 +74,11 @@ const BigShareButton = styled.button`
   background: white;
   width: 70px;
   height: 35px;
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
 `;
 
 module.exports = {

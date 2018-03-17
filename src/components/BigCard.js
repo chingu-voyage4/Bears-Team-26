@@ -22,6 +22,11 @@ const VisitButton = styled.button`
   &:hover {
     background: #c3d8db;
   }
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
 `;
 
 const CommentsBar = styled.div`
@@ -66,6 +71,11 @@ const ViewMore = styled.button`
   &:hover {
     background: #b3cbce;
   }
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
 `;
 
 const PostedSpan = styled.span`
@@ -97,11 +107,17 @@ const CommentLine = styled.span`
   display: inline-block;
   text-overflow: ellipsis;
   box-shadow: 0 0 1px #7a8c8f;
-  margin: 5px 0 5px 7.5%;
-  padding: 5px 40px 5px 10px;
+  margin: 5px 0 5px 10px;
+  padding: 5px 35px 5px 10px;
   border-radius: 5px;
   font-family: "Alegreya", serif;
   background: #e5fafd;
+  transition: all 0.3s;
+
+  @media (min-width: 630px) {
+    margin-left: 5%;
+    padding-right: 45px;
+  }
 `;
 
 function CommentDiv(comment) {
