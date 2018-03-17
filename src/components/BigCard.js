@@ -122,6 +122,7 @@ const CommentLine = styled.span`
 
 function CommentDiv(comment) {
   const { user, commentText, postedOn } = comment;
+  console.log(comment);
   return (
     <CommentLine>
       {user} "{commentText}" <br /> on {postedOn.substring(4)}
@@ -204,8 +205,8 @@ class BigCard extends Component {
           </CommentsSpan>
           {this.state.commentsVisible ? (
             <CommentsBox>
-              {this.props.comments.map((comment, i) => (
-                <CommentDiv key={i} {...comment} />
+              {this.props.comments.map(comment => (
+                <CommentDiv key={comment.id} {...comment} />
               ))}
             </CommentsBox>
           ) : null}
