@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./Card.css";
 import share from "./share.png";
 import { LikeButton, ShareButton } from "./Utils.js";
+import { withRouter } from "react-router-dom";
 
 class Card extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class Card extends Component {
   }
 
   handleClick() {
-    alert("TODO: Add links");
+    return this.props.history.push(`/pin/${this.props.id}`);
   }
 
   handleShare(event) {
@@ -61,4 +62,4 @@ class Card extends Component {
   }
 }
 
-export default Card;
+export default withRouter(Card);
