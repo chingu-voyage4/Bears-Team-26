@@ -8,16 +8,19 @@ const sampleDate = new Date().toDateString();
 
 const commentsArr = [
   {
+    id: 1,
     user: "John Smith",
     commentText: "Wow what a Cool Bear!",
     postedOn: sampleDate
   },
   {
+    id: 2,
     user: "Steve Johnson",
     commentText: "Such an inspirational photo!",
     postedOn: sampleDate
   },
   {
+    id: 3,
     user: "Smarty Pants",
     postedOn: sampleDate,
     commentText: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
