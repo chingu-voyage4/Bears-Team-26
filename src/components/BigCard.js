@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import "./BigCard.css";
-import share from "./share.png";
+import "../style/BigCard.css";
+import share from "../images/share.png";
 import { BigLikeButton, BigShareButton } from "./Utils.js";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 
 const VisitButton = styled.button`
   position: relative;
@@ -168,6 +169,7 @@ class BigCard extends Component {
     this.handleLike = this.handleLike.bind(this);
     this.handleCommentClick = this.handleCommentClick.bind(this);
     this.getPinData = this.getPinData.bind(this);
+    this.handleReturnToSplash = this.handleReturnToSplash.bind(this);
     this.state = {
       commentsVisible: false
     };
@@ -202,6 +204,11 @@ class BigCard extends Component {
     };
   }
 
+  handleReturnToSplash(e) {
+    e.stopPropagation();
+    return this.props.history.push("/");
+  }
+
   getPinData() {
     //Will eventually be used to get the pin's info from the back-end
     this.setState({
@@ -217,52 +224,58 @@ class BigCard extends Component {
   render() {
     return (
       <div
-        className="bigCard"
-        style={{
-          transition: "height 0.4s",
-          height: this.state.commentsVisible ? "950px" : null
-        }}
+        className="outerTint"
+        onClick={this.handleReturnToSplash}
+        style={{ height: this.state.commentsVisible ? "1050px" : null }}
       >
-        <span>
-          <BigShareButton onClick={this.handleShare}>
-            <img
-              style={{ transition: "all 0.4s" }}
-              src={`/${share}`}
-              height="100%"
-              alt="Share!"
-            />
-          </BigShareButton>
-          <BigLikeButton onClick={this.handleLike}>Like!</BigLikeButton>
-        </span>
         <div
-          className="bigPic"
-          style={{ backgroundImage: `url(${this.state.imgUrl})` }}
-        />
-        <VisitButton onClick={this.handleVisit}>Visit</VisitButton>
-        <CommentsBar
+          className="bigCard"
           style={{
             transition: "height 0.4s",
-            height: this.state.commentsVisible ? "300px" : null
+            height: this.state.commentsVisible ? "950px" : null
           }}
         >
-          <CommentsSpan>
-            {this.state.commentCount} Comments
-            <ViewMore onClick={this.handleCommentClick}>...</ViewMore>
-          </CommentsSpan>
-          {this.state.commentsVisible ? (
-            <CommentsBox>
-              {this.state.comments.map(comment => (
-                <CommentDiv key={comment.id} {...comment} />
-              ))}
-            </CommentsBox>
-          ) : null}
-        </CommentsBar>
-        <PostedSpan>
-          Posted By {this.state.postedBy} on {this.state.postedOn}
-        </PostedSpan>
+          <span>
+            <BigShareButton onClick={this.handleShare}>
+              <img
+                style={{ transition: "all 0.4s" }}
+                src={`/${share}`}
+                height="100%"
+                alt="Share!"
+              />
+            </BigShareButton>
+            <BigLikeButton onClick={this.handleLike}>Like!</BigLikeButton>
+          </span>
+          <div
+            className="bigPic"
+            style={{ backgroundImage: `url(${this.state.imgUrl})` }}
+          />
+          <VisitButton onClick={this.handleVisit}>Visit</VisitButton>
+          <CommentsBar
+            style={{
+              transition: "height 0.4s",
+              height: this.state.commentsVisible ? "300px" : null
+            }}
+          >
+            <CommentsSpan>
+              {this.state.commentCount} Comments
+              <ViewMore onClick={this.handleCommentClick}>...</ViewMore>
+            </CommentsSpan>
+            {this.state.commentsVisible ? (
+              <CommentsBox>
+                {this.state.comments.map(comment => (
+                  <CommentDiv key={comment.id} {...comment} />
+                ))}
+              </CommentsBox>
+            ) : null}
+          </CommentsBar>
+          <PostedSpan>
+            Posted By {this.state.postedBy} on {this.state.postedOn}
+          </PostedSpan>
+        </div>
       </div>
     );
   }
 }
 
-export default BigCard;
+export default withRouter(BigCard);
