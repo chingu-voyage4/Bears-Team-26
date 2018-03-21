@@ -15,6 +15,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', (req, res) => {
+  //Description: Create a Board
     let title = req.body.title;
     let creator = 1;
     let description = req.body.description;
@@ -30,6 +31,7 @@ router.post('/', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
+  //Delete a Board
   let idToDelete = req.params.id;
   Board.findByIdAndRemove(idToDelete , (err, deletedDocument) => {
       res.json({
@@ -38,7 +40,23 @@ router.delete('/:id', (req, res) => {
       })
   })
 })
+
+router.patch('/:id', (req, res) => {
+  //Delete a Board
+  let idToChange = req.params.id;
+  Board.findByIdAndUpdate(idToChange , (err, deletedDocument) => {
+
+    //TODO: Finish implementing.
+      res.json({
+        err: err, 
+        deletedDocument: deletedDocument
+      })
+  })
+})
+
+
 router.get('/:id', (req, res) => {
+  //Retrieve information about a Board
   let idToFind = req.params.id;
   Board.findById(idToFind, (err, result) => {
     res.json({
@@ -49,6 +67,7 @@ router.get('/:id', (req, res) => {
 })
 
 router.get('/:id/pins', (req, res) => {
+  //Retrieve the Pins on a Board
   let idToFind = req.params.id;
   Board.findById(idToFind, (err, result) => {
     res.json({
