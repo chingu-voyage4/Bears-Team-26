@@ -206,7 +206,9 @@ class BigCard extends Component {
 
   handleReturnToSplash(e) {
     e.stopPropagation();
-    return this.props.history.push("/");
+    if (e.target.className === "outerTint") {
+      return this.props.history.goBack(); //Now that's a handy function haha
+    }
   }
 
   getPinData() {
