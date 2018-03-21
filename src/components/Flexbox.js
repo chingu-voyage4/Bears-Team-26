@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import "./Flexbox.css";
+import "../style/Flexbox.css";
 import Card from "./Card.js";
 
 const sampleIDs = [0, 1, 2, 3, 4];
