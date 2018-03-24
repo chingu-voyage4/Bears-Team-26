@@ -13,6 +13,7 @@ router.post('/', (req, res)  => {
         title: title, 
         imageURL: imageURL,
         description: description,
+        creator: req.user._id,
 
     })
     newPin.save((err, result) => {

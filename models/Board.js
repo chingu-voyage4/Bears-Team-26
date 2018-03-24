@@ -1,12 +1,13 @@
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 let Pin = require('./Pin');
+let User = require('./User')
 let boardSchema = new Schema({
 
     title: String,
     pins: [Pin.schema],
     created_at: Date,
-    creator: String,
+    creator: { type: Schema.Types.ObjectId, ref: 'User' },
     description: String,
     image: String,
     name: String,
@@ -17,7 +18,7 @@ let boardSchema = new Schema({
 boardSchema.statics.createNew = function(title, creator, description, image, name, privacy, callback){
     let newBoard = new Board({
         title: title,
-        creator: String,
+        creator: creator,
         created_at: Date.now(),
         pins: [],
         description: description,
@@ -31,5 +32,7 @@ boardSchema.statics.createNew = function(title, creator, description, image, nam
         callback(err, result);
     });
 }
+
+boardSchema.index({'description': 'text'}); //Create a text index so that $text works. 
 var Board = mongoose.model('Board', boardSchema);
 module.exports = Board; 

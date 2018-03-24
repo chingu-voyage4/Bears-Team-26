@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 let User = require('../models/User');
+let Board = require('../models/Board');
+let Pin = require('../models/Pin');
 /* GET home page. */
 router.get('/', function(req, res) {
     //Return the logged in user's information
@@ -160,11 +162,44 @@ router.get('/pins/', (req, res) => {
 });
 
 router.post('/search/boards', (req, res) => {
-    //TODO Implement
+    //Create an array containing the words the user searched for
+    //See https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
+    let searchTerms = req.body.search_string;
+    let results = [];
+    Board.find({'creator': String(req.user._id),  $text: { $search: searchTerms } } , { score: { $meta: "textScore" } } )
+        .sort({ score : { $meta : 'textScore' } })
+        .exec((err, results) => {
+            console.log(searchTerms);
+            res.send(results);
+        })
+
 })
 
 router.post('/search/pins', (req, res) => {
-    //TODO Implement
+    //TOOD: Make this actually work.
+    let searchTerms = req.body.search_string;
+    Pin.find({ $text: { $search: searchTerms } } )
+        .exec((err, results) => {
+            console.log(err);
+            console.log(results);
+            let returnValue = [];
+            results.forEach(result => {
+                console.log("result = " + result);
+                if (result.likes.includes(String(req.user._id))){
+                    console.log("like match");
+                    returnValue.push(result);
+                }
+                else if (result.shares.includes(req.user._id)){
+                    console.log("share match");
+                    returnValue.push(result);
+                }
+                else {
+                    console.log('no match');
+                }
+            })
+            res.send(result);
+        })
+
 })
 
 

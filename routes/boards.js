@@ -17,7 +17,8 @@ router.get('/', function(req, res, next) {
 router.post('/', (req, res) => {
   //Description: Create a Board
     let title = req.body.title;
-    let creator = 1;
+    let creator = String(req.user._id);
+    console.log(creator);
     let description = req.body.description;
     let image = req.body.image;
     let name = req.body.name;
