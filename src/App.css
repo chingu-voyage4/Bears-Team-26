@@ -37,3 +37,9 @@ html {
     transform: rotate(360deg);
   }
 }
+* {
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
