@@ -33,7 +33,10 @@ class Card extends Component {
   }
 
   handleClick() {
-    return this.props.history.push(`/pin/${this.props.id}`);
+    return this.props.history.push({
+      pathname: `/pin/${this.props.id}`,
+      state: { imgUrl: this.props.imgUrl }
+    });
   }
 
   handleShare(event) {
