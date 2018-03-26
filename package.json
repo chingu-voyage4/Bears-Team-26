@@ -5,8 +5,9 @@
   "description": "Voyage-4",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www",
-    "build": "webpack --mode production"
+    "start": "concurrently \"npm run build --prefix client/\" \"node ./bin/www\"",
+    "build": "webpack --mode production",
+    "postinstall": "cd client && npm install --only=dev && npm install"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/chingu-voyage4/Bears-Team-26#readme",
   "dependencies": {
+    "concurrently": "^3.5.1",
     "css-loader": "^0.28.10",
     "mongoose-findorcreate": "^3.0.0",
     "passport-twitter": "^1.0.4",
@@ -51,7 +53,6 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "serve-favicon": "~2.4.5",
-    "styled-components": "^3.2.3",
     "url-loader": "^1.0.1",
     "webpack-cli": "^2.0.10",
     "webpack-dev-server": "^3.1.0"
