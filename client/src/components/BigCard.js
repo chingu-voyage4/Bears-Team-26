@@ -4,6 +4,7 @@ import share from "../images/share.png";
 import { BigLikeButton, BigShareButton } from "./Utils.js";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
+import Lightbox from "react-image-lightbox";
 
 const VisitButton = styled.button`
   position: relative;
@@ -71,6 +72,31 @@ const ViewMore = styled.button`
 
   &:hover {
     background: #b3cbce;
+  }
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
+`;
+
+const AddCommentButton = styled.button`
+  float: right;
+  margin: 15px 15px 0 0;
+  font-family: "Alegreya", serif;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 5px 10px 5px 10px;
+  text-decoration: none;
+  border-radius: 15%;
+  box-shadow: 0 0 10px rgba(122, 140, 143, 0.9);
+  background: rgba(122, 140, 143, 0.3);
+  border: 1px hidden;
+  color: #1e2627;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #c3d8db;
   }
 
   &:active,
@@ -153,9 +179,9 @@ Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risu
 ];
 
 function CommentDiv(comment) {
-  const { user, commentText, postedOn } = comment;
+  const { user, commentText, postedOn, id } = comment;
   return (
-    <CommentLine>
+    <CommentLine key={id}>
       {user} "{commentText}" <br /> on {postedOn.substring(4)}
     </CommentLine>
   );
@@ -167,11 +193,14 @@ class BigCard extends Component {
     this.handleVisit = this.handleVisit.bind(this);
     this.handleShare = this.handleShare.bind(this);
     this.handleLike = this.handleLike.bind(this);
-    this.handleCommentClick = this.handleCommentClick.bind(this);
+    this.handleViewMoreComments = this.handleViewMoreComments.bind(this);
     this.getPinData = this.getPinData.bind(this);
     this.handleReturnToSplash = this.handleReturnToSplash.bind(this);
+    this.handleAddComment = this.handleAddComment.bind(this);
+    this.handleExpandPicture = this.handleExpandPicture.bind(this);
     this.state = {
-      commentsVisible: false
+      commentsVisible: false,
+      lightboxOpen: false
     };
   }
 
@@ -193,7 +222,7 @@ class BigCard extends Component {
     window.open(this.state.imgUrl, "_blank");
   }
 
-  handleCommentClick(event) {
+  handleViewMoreComments(event) {
     event.stopPropagation();
     this.setState(this.toggleCommentVisibility);
   }
@@ -211,6 +240,12 @@ class BigCard extends Component {
     }
   }
 
+  handleAddComment() {}
+
+  handleExpandPicture() {
+    this.setState({ lightboxOpen: true });
+  }
+
   getPinData() {
     //Will eventually be used to get the pin's info from the back-end
     this.setState({
@@ -218,8 +253,7 @@ class BigCard extends Component {
       postedBy: "John Smith",
       postedOn: sampleDate,
       commentCount: Object.keys(commentsArr).length,
-      imgUrl:
-        "https://static.boredpanda.com/blog/wp-content/uploads/2016/09/mother-bear-cubs-animal-parenting-21-57e3a2161d7f7__880.jpg"
+      imgUrl: this.props.location.state.imgUrl
     });
   }
 
@@ -241,7 +275,7 @@ class BigCard extends Component {
             <BigShareButton onClick={this.handleShare}>
               <img
                 style={{ transition: "all 0.4s" }}
-                src={`/${share}`}
+                src={`${share}`}
                 height="100%"
                 alt="Share!"
               />
@@ -251,30 +285,43 @@ class BigCard extends Component {
           <div
             className="bigPic"
             style={{ backgroundImage: `url(${this.state.imgUrl})` }}
+            onClick={this.handleExpandPicture}
           />
           <VisitButton onClick={this.handleVisit}>Visit</VisitButton>
           <CommentsBar
             style={{
-              transition: "height 0.4s",
-              height: this.state.commentsVisible ? "300px" : null
+              transition: "all 0.4s",
+              height: this.state.commentsVisible ? "320px" : null,
+              paddingBottom: this.state.commentsVisible ? "20px" : "0px"
             }}
           >
             <CommentsSpan>
               {this.state.commentCount} Comments
-              <ViewMore onClick={this.handleCommentClick}>...</ViewMore>
+              <ViewMore onClick={this.handleViewMoreComments}>...</ViewMore>
             </CommentsSpan>
             {this.state.commentsVisible ? (
-              <CommentsBox>
-                {this.state.comments.map(comment => (
-                  <CommentDiv key={comment.id} {...comment} />
-                ))}
-              </CommentsBox>
+              <span>
+                <CommentsBox>
+                  {this.state.comments.map(comment => CommentDiv(comment))}
+                </CommentsBox>
+                <AddCommentButton onClick={this.handleAddComment}>
+                  Comment
+                </AddCommentButton>
+              </span>
             ) : null}
           </CommentsBar>
           <PostedSpan>
             Posted By {this.state.postedBy} on {this.state.postedOn}
           </PostedSpan>
         </div>
+        {this.state.lightboxOpen ? (
+          <Lightbox
+            mainSrc={this.state.imgUrl}
+            onCloseRequest={() => {
+              this.setState({ lightboxOpen: false });
+            }}
+          />
+        ) : null}
       </div>
     );
   }

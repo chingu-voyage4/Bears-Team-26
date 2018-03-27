@@ -1,5 +1,9 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 module.exports = {
+  entry: "./src/index.js",
+  output: {
+    publicPath: "/"
+  },
   module: {
     rules: [
       {
@@ -19,15 +23,12 @@ module.exports = {
         ]
       },
       {
-          test: /\.css$/,
-          loader: 'style-loader!css-loader'
+        test: /\.css$/,
+        loader: "style-loader!css-loader"
       },
       {
-          test: /\.(jpe?g|png|gif|svg)$/i,
-          use: [
-            'url-loader?limit=10000',
-            'img-loader'
-          ]
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: ["url-loader?limit=10000", "img-loader"]
       }
     ]
   },
@@ -37,5 +38,5 @@ module.exports = {
       filename: "./index.html"
     })
   ],
-  devServer: { historyApiFallback:true }
+  devServer: { historyApiFallback: true }
 };
