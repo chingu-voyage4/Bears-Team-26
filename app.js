@@ -19,6 +19,8 @@ let app = express();
 let mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 
+
+app.use(express.static(path.join(__dirname, 'client/dist')));
 // sessions
 
 app.use(session({
