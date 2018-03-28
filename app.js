@@ -103,7 +103,7 @@ app.use("/users", users);
 app.use("/boards", boards);
 app.use("/auth", auth);
 app.use("/me", me);
-app.use("/pins", pins);
+app.use("/pin", pins);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error("Not Found");
