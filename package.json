@@ -5,7 +5,8 @@
   "description": "Voyage-4",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run build --prefix client/\" \"node ./bin/www\"",
+    "start":
+      "concurrently \"npm run build --prefix client/\" \"node ./bin/www\"",
     "build": "webpack --mode production",
     "postinstall": "cd client && npm install --only=dev && npm install"
   },
@@ -23,7 +24,6 @@
   "dependencies": {
     "concurrently": "^3.5.1",
     "css-loader": "^0.28.10",
-    "react-image-lightbox": "^4.6.0",
     "mongoose-findorcreate": "^3.0.0",
     "passport-twitter": "^1.0.4",
     "react-router": "^4.2.0",

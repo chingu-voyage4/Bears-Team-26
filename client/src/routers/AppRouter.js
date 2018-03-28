@@ -5,7 +5,6 @@ import Flexbox from "../components/Flexbox";
 import Footer from "../components/Footer";
 import BigCard from "../components/BigCard";
 
-
 const AppRouter = () => (
   <BrowserRouter>
     <div>
