@@ -200,7 +200,8 @@ class BigCard extends Component {
     this.handleExpandPicture = this.handleExpandPicture.bind(this);
     this.state = {
       commentsVisible: false,
-      lightboxOpen: false
+      lightboxOpen: false,
+      imgUrl: ""
     };
   }
 
@@ -247,13 +248,17 @@ class BigCard extends Component {
   }
 
   getPinData() {
+    const tempImg =
+      this.props.location.state !== undefined
+        ? this.props.location.state.imgUrl
+        : "";
     //Will eventually be used to get the pin's info from the back-end
     this.setState({
       comments: commentsArr,
       postedBy: "John Smith",
       postedOn: sampleDate,
       commentCount: Object.keys(commentsArr).length,
-      imgUrl: this.props.location.state.imgUrl
+      imgUrl: tempImg
     });
   }
 
@@ -295,7 +300,7 @@ class BigCard extends Component {
               paddingBottom: this.state.commentsVisible ? "20px" : "0px"
             }}
           >
-            <CommentsSpan>
+            <CommentsSpan id="CommentsSpan">
               {this.state.commentCount} Comments
               <ViewMore onClick={this.handleViewMoreComments}>...</ViewMore>
             </CommentsSpan>
