@@ -216,7 +216,11 @@ class BigCard extends Component {
   }
 
   handleLike(event) {
-    alert("TODO: Add Like events");
+    if (this.props.isAuthenticated) {
+      alert("TODO: Add Like events");
+    } else {
+      alert("You must be logged in to like this Pin!");
+    }
     event.stopPropagation();
   }
 
