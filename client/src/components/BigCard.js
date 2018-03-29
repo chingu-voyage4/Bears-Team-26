@@ -5,6 +5,7 @@ import { BigLikeButton, BigShareButton } from "./Utils.js";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import Lightbox from "react-image-lightbox";
+import { connect } from "react-redux";
 
 const VisitButton = styled.button`
   position: relative;
@@ -241,7 +242,12 @@ class BigCard extends Component {
     }
   }
 
-  handleAddComment() {}
+  handleAddComment() {
+    if (this.props.isAuthenticated) {
+    } else {
+      alert("You must be logged in to post a comment!");
+    }
+  }
 
   handleExpandPicture() {
     this.setState({ lightboxOpen: true });
@@ -332,4 +338,10 @@ class BigCard extends Component {
   }
 }
 
-export default withRouter(BigCard);
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.isAuthenticated
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(BigCard));
