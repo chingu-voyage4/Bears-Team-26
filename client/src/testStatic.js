@@ -1,1 +1,1 @@
-module.exports = "This string replaces static files in tests";
+module.exports = ""; //This string replaces static files in tests
