@@ -18,7 +18,6 @@ router.post('/', (req, res) => {
   //Description: Create a Board
     let title = req.body.title;
     let creator = String(req.user._id);
-    console.log(creator);
     let description = req.body.description;
     let image = req.body.image;
     let name = req.body.name;
@@ -43,14 +42,14 @@ router.delete('/:id', (req, res) => {
 })
 
 router.patch('/:id', (req, res) => {
-  //Delete a Board
+  //Update a Board
   let idToChange = req.params.id;
-  Board.findByIdAndUpdate(idToChange , (err, deletedDocument) => {
+  Board.findByIdAndUpdate(idToChange , (err, changedDocument) => {
 
     //TODO: Finish implementing.
       res.json({
         err: err, 
-        deletedDocument: deletedDocument
+        changedDocument: changedDocument
       })
   })
 })

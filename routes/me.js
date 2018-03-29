@@ -162,44 +162,35 @@ router.get('/pins/', (req, res) => {
 });
 
 router.post('/search/boards', (req, res) => {
-    //Create an array containing the words the user searched for
-    //See https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
-    let searchTerms = req.body.search_string;
-    let results = [];
-    Board.find({'creator': String(req.user._id),  $text: { $search: searchTerms } } , { score: { $meta: "textScore" } } )
-        .sort({ score : { $meta : 'textScore' } })
-        .exec((err, results) => {
-            console.log(searchTerms);
-            res.send(results);
-        })
+    if(req.isAuthenticated()){
+        //See https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
+        let searchTerms = req.body.search_string;
+        let results = [];
+        Board.find({'creator': String(req.user._id),  $text: { $search: searchTerms } } , { score: { $meta: "textScore" } } )
+            .sort({ score : { $meta : 'textScore' } })
+            .exec((err, results) => {
+                console.log(searchTerms);
+                res.send(results);
+            })
+    }else {
+        res.send("You must be logged in to access this function");
+    }
 
+    
 })
 
 router.post('/search/pins', (req, res) => {
-    //TOOD: Make this actually work.
+    if(req.isAuthenticated()){
     let searchTerms = req.body.search_string;
-    Pin.find({ $text: { $search: searchTerms } } )
+    Pin.find({ $text: { $search: searchTerms }, "creator": req.user._id } )
         .exec((err, results) => {
-            console.log(err);
-            console.log(results);
-            let returnValue = [];
-            results.forEach(result => {
-                console.log("result = " + result);
-                if (result.likes.includes(String(req.user._id))){
-                    console.log("like match");
-                    returnValue.push(result);
-                }
-                else if (result.shares.includes(req.user._id)){
-                    console.log("share match");
-                    returnValue.push(result);
-                }
-                else {
-                    console.log('no match');
-                }
-            })
-            res.send(result);
+            res.send(results);
         })
 
+    }
+    else {
+        res.send("You must be logged in to access this function");
+    }
 })
 
 
