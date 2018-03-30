@@ -11,9 +11,7 @@ class AddPin extends React.Component {
     super(props);
     this.handleReturnToSplash = this.handleReturnToSplash.bind(this);
     this.handleCreatePin = this.handleCreatePin.bind(this);
-    this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
-    this.handleImgURLChange = this.handleImgURLChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.state = {
       title: "",
       imgURL: "",
@@ -26,6 +24,12 @@ class AddPin extends React.Component {
     if (e.target.className === "outerTint") {
       return this.props.history.goBack();
     }
+  }
+
+  handleInputChange(e) {
+    this.setState({
+      [e.target.name] : e.target.value
+    });
   }
 
   handleTitleChange(e) {
@@ -52,14 +56,20 @@ class AddPin extends React.Component {
       return alert("Please complete all forms before creating a new pin!");
     }
     try {
-      fetch("/pin/new", {
+      const response = await fetch("/pin/new", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           title: title,
           imageURL: imgURL,
           description: description
         })
-      }).then(res => console.log(res), err => console.log(err));
+      });
+      const json = await response.json();
+      const { result } = json;
+      return this.props.history.push({pathname: `/pin/${result}`, state: {imgUrl:imgURL}});
     } catch (err) {
       console.log(err);
     }
@@ -72,21 +82,21 @@ class AddPin extends React.Component {
           <input
             name="title"
             value={this.state.title}
-            onChange={this.handleTitleChange}
+            onChange={this.handleInputChange}
           />
           <label for="title">Title</label>
           <br />
           <input
             name="imgURL"
             value={this.state.imgURL}
-            onChange={this.handleImgURLChange}
+            onChange={this.handleInputChange}
           />
           <label for="imgURL">Image URL</label>
           <br />
           <input
             name="description"
             value={this.state.description}
-            onChange={this.handleDescriptionChange}
+            onChange={this.handleInputChange}
           />
           <label for="description">Description</label>
           <br />
