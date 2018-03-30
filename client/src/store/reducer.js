@@ -1,5 +1,6 @@
 const initialState = {
-  isAuthenticated: false
+  isAuthenticated: false,
+  pinData: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -13,6 +14,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: false
+      };
+    case "SET_PIN_DATA_STATE":
+      return {
+        ...state,
+        pinData: action.pinData
       };
     default:
       return state;

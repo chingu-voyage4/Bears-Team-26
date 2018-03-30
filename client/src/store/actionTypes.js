@@ -10,18 +10,41 @@ const logoutAction = () => {
   };
 };
 
-const getPinDataAction = async id => {
-  /*
-  const data = await fetch(data);
+const fetchPinData = function(id) {
+  return fetch(`/pin/${id}`, {
+    method: "POST",
+    body: JSON.stringify({
+      id: id
+    })
+  });
+};
+
+const createPinFetch = function(data) {
+  return fetch("/pin/new", {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+};
+
+const setPinStateDataAction = data => {
   return {
-    type: "GET_PIN_DATA",
-    payload: {...data}
-  }
-  */
+    type: "SET_PIN_DATA_STATE",
+    pinData: data
+  };
+};
+
+const getPinDataAction = function(id) {
+  return function(dispatch) {
+    return fetchPinData(id).then(
+      data => dispatch(setPinStateDataAction(data)),
+      err => console.log(err)
+    );
+  };
 };
 
 module.exports = {
   loginAction,
   logoutAction,
-  getPinDataAction
+  getPinDataAction,
+  setPinStateDataAction
 };
