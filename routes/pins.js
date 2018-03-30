@@ -1,8 +1,7 @@
 var express = require("express");
 var router = express.Router();
 let Pin = require("../models/Pin");
-var path = require("path");
-
+let User = require("../models/User");
 router.post("/", (req, res) => {
   //TODO: Require all fields before the post will work.
   let title = req.body.title ? req.body.title : "none";
@@ -13,12 +12,17 @@ router.post("/", (req, res) => {
     shares: [],
     title: title,
     imageURL: imageURL,
-    description: description
+    description: description,
+    creator: req.user._id
   });
   newPin.save((err, result) => {
-    res.json({
-      err: err,
-      result: result
+    User.findById(req.user._id, (error, user) => {
+      user.pins.push(result._id);
+      user.save();
+      res.json({
+        err: err,
+        result: result
+      });
     });
   });
 });
