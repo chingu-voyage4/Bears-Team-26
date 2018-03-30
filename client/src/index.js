@@ -1,11 +1,13 @@
+import "babel-polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
 //import './index.css';
 //import App from './App';
 import AppRouter from "./routers/AppRouter";
-import { createStore } from "redux";
+import { createStore, applyMiddleWare } from "redux";
 import reducer from "./store/reducer";
 import { Provider } from "react-redux";
+import thunk from "redux-thunk";
 
 const store = createStore(reducer);
 
