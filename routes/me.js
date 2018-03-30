@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 let User = require('../models/User');
+let Board = require('../models/Board');
+let Pin = require('../models/Pin');
 /* GET home page. */
 router.get('/', function(req, res) {
     //Return the logged in user's information
@@ -160,11 +162,35 @@ router.get('/pins/', (req, res) => {
 });
 
 router.post('/search/boards', (req, res) => {
-    //TODO Implement
+    if(req.isAuthenticated()){
+        //See https://stackoverflow.com/questions/24714166/full-text-search-with-weight-in-mongoose
+        let searchTerms = req.body.search_string;
+        let results = [];
+        Board.find({'creator': String(req.user._id),  $text: { $search: searchTerms } } , { score: { $meta: "textScore" } } )
+            .sort({ score : { $meta : 'textScore' } })
+            .exec((err, results) => {
+                console.log(searchTerms);
+                res.send(results);
+            })
+    }else {
+        res.send("You must be logged in to access this function");
+    }
+
+    
 })
 
 router.post('/search/pins', (req, res) => {
-    //TODO Implement
+    if(req.isAuthenticated()){
+    let searchTerms = req.body.search_string;
+    Pin.find({ $text: { $search: searchTerms }, "creator": req.user._id } )
+        .exec((err, results) => {
+            res.send(results);
+        })
+
+    }
+    else {
+        res.send("You must be logged in to access this function");
+    }
 })
 
 
