@@ -1,4 +1,4 @@
-let mongoose = require('mongoose');
+/*let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 let findOrCreate = require('mongoose-findorcreate')
 let Pin = require('./Pin');
@@ -16,3 +16,4 @@ let userSchema = new Schema({
 userSchema.plugin(findOrCreate);
 var User = mongoose.model('User', userSchema);
 module.exports = User; 
+*/
