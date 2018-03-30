@@ -1,0 +1,128 @@
+.header-container {
+  display: flex;
+  display: -webkit-flex;
+  padding: 1em;
+  border-bottom: 1px solid #e0e0e0;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  color: rgb(13, 26, 38);
+  font-family: "Roboto", sans-serif;
+  height: 60px;
+  vertical-align: bottom;
+}
+
+.header-title {
+  font-size: 1.2em;
+  flex: 0 0 auto;
+  transition: all 0.25s linear;
+  text-decoration: none;
+}
+a {
+  text-decoration: none;
+}
+.header-title:hover {
+  color: #01579b;
+}
+
+.logo {
+  float: left;
+  margin-left: 28px;
+  font-size: 1.5em;
+  height: 24px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-right: 10px;
+}
+/* .logo{
+    position: relative;
+    top: 3px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+  } */
+.header-selection {
+  flex: 0 0 auto;
+  font-size: 1.1em;
+  padding: 0 1em;
+  transition: all 0.25s linear;
+  color: black;
+}
+
+.header-login {
+  display: inline-block;
+}
+.button {
+  font-size: 1.1em;
+  border-right: 1px solid #e0e0e0;
+  padding: 0 1em;
+  transition: all 0.25s linear;
+  margin-left: 1em;
+}
+.header-selection {
+  flex: 0 0 auto;
+}
+.header-selection > hover {
+  color: #01579b;
+}
+button:focus {
+  outline: 0;
+}
+
+.header-button {
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.5s ease;
+  font-size: 0.7em;
+  height: 50px;
+  margin: 0 20px;
+  padding: 0 4px;
+  position: relative;
+  background: none;
+  border: none;
+  padding-bottom: 20px;
+  font-weight: 100;
+  vertical-align: bottom;
+  background: #3a7999;
+  color: #f2f2f2;
+}
+.twitter-button {
+  border-color: #007aa6;
+  background-color: #008cbf;
+  color: white;
+  padding-right: 45px;
+  font-family: "Merriweather Sans", sans-serif;
+  border-bottom: 2px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+  box-shadow: 0 4px 2px -2px gray;
+  text-shadow: rgba(0, 0, 0, 0.5) -1px -1px 0;
+  padding-bottom: 2px;
+  padding-top: 5px;
+}
+.twitter-img {
+  margin-right: 15px;
+}
+.header-selection > first-child {
+  border-left: 1px solid #e0e0e0;
+}
+
+.logout {
+  color: black;
+  border: 1px solid hidden;
+  box-shadow: 0px 0px 4px gray;
+  border-radius: 15%;
+  float: left;
+  margin: 10px 0 0 20px;
+  color: black;
+  background: white;
+  width: 70px;
+  height: 35px;
+  font-size: 0.9em;
+}
+.nav-img {
+  transition: "all 0.4s";
+  height: 100%;
+  float: right;
+  margin-right: 12px;
+}
