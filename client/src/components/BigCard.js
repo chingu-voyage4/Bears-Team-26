@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import "../style/BigCard.css";
+import "../style/Utils.css";
 import share from "../images/share.png";
 import { BigLikeButton, BigShareButton } from "./Utils.js";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import Lightbox from "react-image-lightbox";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { getPinDataAction } from "../store/actionTypes";
 
 const VisitButton = styled.button`
   position: relative;
@@ -202,7 +205,8 @@ class BigCard extends Component {
     this.state = {
       commentsVisible: false,
       lightboxOpen: false,
-      imgUrl: ""
+      imgUrl: "",
+      id: window.location.pathname.substring(5)
     };
   }
 
@@ -258,6 +262,7 @@ class BigCard extends Component {
   }
 
   getPinData() {
+    this.props.getPinDataAction(this.state.id);
     const tempImg =
       this.props.location.state !== undefined
         ? this.props.location.state.imgUrl
@@ -273,6 +278,7 @@ class BigCard extends Component {
   }
 
   render() {
+    console.log(this.props.pinData);
     return (
       <div
         className="outerTint"
@@ -344,8 +350,17 @@ class BigCard extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.isAuthenticated
+    isAuthenticated: state.isAuthenticated,
+    pinData: state.pinData
   };
 };
 
-export default connect(mapStateToProps)(withRouter(BigCard));
+const mapDispatchToProps = dispatch => {
+  return {
+    ...bindActionCreators({ getPinDataAction }, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withRouter(BigCard)
+);

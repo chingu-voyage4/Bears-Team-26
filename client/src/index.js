@@ -4,15 +4,15 @@ import ReactDOM from "react-dom";
 //import './index.css';
 //import App from './App';
 import AppRouter from "./routers/AppRouter";
-import { createStore, applyMiddleWare } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import reducer from "./store/reducer";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunk));
 
 store.subscribe(() => {
-  console.log(store.getState());
+  //console.log(store.getState());
 });
 
 ReactDOM.render(
