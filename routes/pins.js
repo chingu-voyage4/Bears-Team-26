@@ -5,18 +5,24 @@ let User = require("../models/User");
 
 router.post("/new", (req, res, next) => {
   //TODO: Require all fields before the post will work.
-  let title = req.body.title ? req.body.title : "none";
-  let imageURL = req.body.imageURL;
-  let description = req.body.description;
+  const {
+    title,
+    imageURL,
+    description,
+    postedOn
+  } = req.body;
+
   let newPin = new Pin({
     likes: [],
     shares: [],
     title: title,
     imageURL: imageURL,
     description: description,
-
+    comments: [],
+    postedOn: postedOn
   });
   //creator: req.user._id
+  //No user id on front end yet
   newPin.save((err, result) => {
     /*
     User.findById(req.user._id, (error, user) => {
@@ -69,12 +75,16 @@ router.get("/:id", function(req, res, next) {
 });
 
 router.post("/:id", function(req, res, next) {
-  console.log(req.params);
   Pin.findById(req.params.id, (err, result) => {
-    res.json({
-      err: err,
-      result: result
-    });
+    if (err) {
+      res.json({
+        err: err
+      });
+    } else {
+      res.json({
+        result: result
+      });
+    }
   });
 });
 

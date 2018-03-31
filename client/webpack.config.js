@@ -38,5 +38,6 @@ module.exports = {
       filename: "./index.html"
     })
   ],
-  devServer: { historyApiFallback: true }
+  devServer: { historyApiFallback: true },
+  watch: true
 };

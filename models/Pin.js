@@ -8,11 +8,12 @@ let pinSchema = new Schema({
     title: String,
     imageURL: String,
     description: String,
-    comments: String,
-    creator: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    comments: [{ commenterName: String, comment: String, postedOn: Date}],
+    creator: { type: Schema.Types.ObjectId, ref: 'User' },
+    postedOn: String
 
   });
 
 
 var Pin = mongoose.model('Pin', pinSchema);
-module.exports = Pin; 
+module.exports = Pin;

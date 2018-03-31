@@ -25,6 +25,12 @@
   border-radius: 5px;
 }
 
+.title {
+  position: absolute;
+  margin: 20px 200px 5px 150px;
+  font-family: "Alegreya", serif;
+}
+
 @media (min-width: 480px) {
   .bigPic {
     height: 50%;
