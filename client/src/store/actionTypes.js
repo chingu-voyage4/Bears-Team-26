@@ -10,26 +10,21 @@ const logoutAction = () => {
   };
 };
 
-const fetchPinData = function(id) {
-  return fetch(`/pin/${id}`, {
+const fetchPinData = async function(id) {
+  const data = await fetch(`/pin/${id}`, {
     method: "POST",
     body: JSON.stringify({
       id: id
     })
   });
-};
-
-const createPinFetch = function(data) {
-  return fetch("/pin/new", {
-    method: "POST",
-    body: JSON.stringify(data)
-  });
+  const json = await data.json();
+  return json;
 };
 
 const setPinStateDataAction = data => {
   return {
     type: "SET_PIN_DATA_STATE",
-    pinData: data
+    pinData: data.result || data.err
   };
 };
 

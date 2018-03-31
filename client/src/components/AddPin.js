@@ -1,7 +1,6 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { setPinDataAction } from "../store/actionTypes";
 import styled from "styled-components";
 import "../style/Utils.css";
 import "../style/BigCard.css";
@@ -27,27 +26,18 @@ class AddPin extends React.Component {
   }
 
   handleInputChange(e) {
-    this.setState({
-      [e.target.name] : e.target.value
-    });
-  }
-
-  handleTitleChange(e) {
-    this.setState({
-      title: e.target.value
-    });
-  }
-
-  handleImgURLChange(e) {
-    this.setState({
-      imgURL: e.target.value
-    });
-  }
-
-  handleDescriptionChange(e) {
-    this.setState({
-      description: e.target.value
-    });
+    if (e.target.name === "title") {
+      if (e.target.value.length <= 15) {
+        this.setState({
+          [e.target.name] : e.target.value
+        });
+      }
+    }
+    else {
+      this.setState({
+        [e.target.name] : e.target.value
+      });
+    }
   }
 
   async handleCreatePin() {
@@ -64,7 +54,8 @@ class AddPin extends React.Component {
         body: JSON.stringify({
           title: title,
           imageURL: imgURL,
-          description: description
+          description: description,
+          postedOn: new Date().toDateString()
         })
       });
       const json = await response.json();
@@ -72,6 +63,7 @@ class AddPin extends React.Component {
       return this.props.history.push({pathname: `/pin/${result}`, state: {imgUrl:imgURL}});
     } catch (err) {
       console.log(err);
+      return alert("There was an error creating new pin!");
     }
   }
 
@@ -106,9 +98,5 @@ class AddPin extends React.Component {
     );
   }
 }
-
-const mapDispatchToProps = dispatch => {
-  return { ...bindActionCreators({ createPinAction }, dispatch) };
-};
 
 export default AddPin;
