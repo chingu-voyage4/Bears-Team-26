@@ -1,4 +1,5 @@
 import React from "react";
+import createRef from 'create-react-ref/lib/createRef';
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -13,6 +14,8 @@ class AddPin extends React.Component {
     this.handleReturnToSplash = this.handleReturnToSplash.bind(this);
     this.handleCreatePin = this.handleCreatePin.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.imgUrlInput = createRef();
+    this.focusUrlInput = this.focusUrlInput.bind(this);
     this.state = {
       title: "",
       imgURL: "",
@@ -39,7 +42,8 @@ class AddPin extends React.Component {
     else if (e.target.name === "imgURL") {
       const httpRegEx = /^http/;
       const siteRegEx = /.\.com|.\.org|.\.net.\.gov/;
-      if (httpRegEx.test(e.target.value) && siteRegEx.test(e.target.value)) {
+      const imgRegEx = /\.jpg|jpeg|\.bmp|\.gif\.png/;
+      if (httpRegEx.test(e.target.value) && siteRegEx.test(e.target.value) && imgRegEx.test(e.target.value)) {
         this.setState({
           [e.target.name] : e.target.value,
           previewImg: e.target.value
@@ -56,8 +60,10 @@ class AddPin extends React.Component {
         [e.target.name] : e.target.value
       });
     }
+  }
 
-
+  focusUrlInput() {
+    this.imgUrlInput.current.focus();
   }
 
   async handleCreatePin() {
@@ -93,6 +99,7 @@ class AddPin extends React.Component {
         <div className="bigCard">
           <div className="eightByEightGrid">
           <div
+            onClick={this.focusUrlInput}
             style={{backgroundImage: `url(${this.state.previewImg})`, "background-size": (this.state.previewImg === addImg) ? "auto" : null}}
             title="Please enter an Image URL"
             className="threeEighthsSpan threeEighthsTall previewImg"
@@ -105,6 +112,7 @@ class AddPin extends React.Component {
             onChange={this.handleInputChange}
             className="inputLine halfSpan"
             style={{"align-self": "start"}}
+            ref={this.imgUrlInput}
           />
           <div className="halfTall"/>
           <label for="title" style={{"align-self": "end"}} className="quarterSpan">Title</label>

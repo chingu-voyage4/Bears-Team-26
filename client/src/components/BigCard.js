@@ -205,7 +205,9 @@ class BigCard extends Component {
 
   handleViewMoreComments(event) {
     event.stopPropagation();
-    this.setState(this.toggleCommentVisibility);
+    if (this.props.pinData.comments) {
+      this.setState(this.toggleCommentVisibility);
+    }
   }
 
   toggleCommentVisibility(state) {
@@ -225,7 +227,7 @@ class BigCard extends Component {
     if (this.props.isAuthenticated) {
       if (this.state.commentTextArea) {
         try {
-          const response = await fetch(`/pin/comment/`, {
+          const response = await fetch(`/pin/comment/${this.state.id}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"

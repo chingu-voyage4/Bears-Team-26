@@ -7,7 +7,7 @@ import Login from "./Login";
 import Logout from "./Logout";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { loginAction, logoutAction } from "../store/actionTypes";
+import { attemptLoginAction, logoutAction } from "../store/actionTypes";
 
 class Header extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class Header extends React.Component {
             {this.props.isAuthenticated ? (
               <Login toggleAuthentication={this.props.logoutAction} />
             ) : (
-              <Logout toggleAuthentication={this.props.loginAction} />
+              <Logout toggleAuthentication={this.props.attemptLoginAction} />
             )}
           </div>
         </div>
@@ -45,7 +45,7 @@ const mapStateToProps = reduxState => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    ...bindActionCreators({ loginAction, logoutAction }, dispatch)
+    ...bindActionCreators({ attemptLoginAction, logoutAction }, dispatch)
   };
 };
 

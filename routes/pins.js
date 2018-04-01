@@ -89,7 +89,7 @@ router.post("/:id", function(req, res, next) {
   });
 });
 
-router.post("/comment/", function(req, res, next) {
+router.post("/comment/:id", function(req, res, next) {
   Pin.findByIdAndUpdate(
     req.body.id,
      {$push: { comments: req.body.comment}},
