@@ -10,6 +10,18 @@ const logoutAction = () => {
   };
 };
 
+const attemptLoginAction = () => {
+  return function(dispatch) {
+    //Will be used to get authentication from back end
+    let success = true;
+    if (success) {
+      dispatch(loginAction());
+    } else {
+      dispatch(logoutAction());
+    }
+  };
+};
+
 const fetchPinData = async function(id) {
   const data = await fetch(`/pin/${id}`, {
     method: "POST",
@@ -38,8 +50,7 @@ const getPinDataAction = function(id) {
 };
 
 module.exports = {
-  loginAction,
+  attemptLoginAction,
   logoutAction,
   getPinDataAction,
-  setPinStateDataAction
 };
