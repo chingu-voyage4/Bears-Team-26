@@ -8,7 +8,7 @@ let pinSchema = new Schema({
     title: String,
     imageURL: String,
     description: String,
-    comments: [{ commenterName: String, comment: String, postedOn: Date}],
+    comments: [{ commenterName: String, commentText: String, postedOn: String}],
     creator: { type: Schema.Types.ObjectId, ref: 'User' },
     postedOn: String
 

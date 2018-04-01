@@ -152,10 +152,10 @@ const CommentLine = styled.span`
 `;
 
 function CommentDiv(comment, i) {
-  const { user, commentText, postedOn } = comment;
+  const { commenterName, commentText, postedOn } = comment;
   return (
     <CommentLine key={i}>
-      {user} "{commentText}" <br /> on {postedOn.toDateString().substring(4)}
+      {commenterName} "{commentText}" <br /> on {postedOn.substring(4)}
     </CommentLine>
   );
 }
@@ -171,11 +171,13 @@ class BigCard extends Component {
     this.handleReturnToSplash = this.handleReturnToSplash.bind(this);
     this.handleAddComment = this.handleAddComment.bind(this);
     this.handleExpandPicture = this.handleExpandPicture.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.state = {
       commentsVisible: false,
       lightboxOpen: false,
       imgUrl: "",
-      id: window.location.pathname.substring(5)
+      id: window.location.pathname.substring(5),
+      commentTextArea: ""
     };
   }
 
@@ -219,8 +221,35 @@ class BigCard extends Component {
     }
   }
 
-  handleAddComment() {
+  async handleAddComment() {
     if (this.props.isAuthenticated) {
+      if (this.state.commentTextArea) {
+        try {
+          const response = await fetch(`/pin/comment/`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              comment: {
+                commenterName: this.state.postedBy,
+                commentText: this.state.commentTextArea,
+                postedOn: new Date().toDateString()
+              },
+              id: this.state.id
+            })
+          });
+          const json = await response.json();
+          if (json.message) {
+            this.getPinData();
+          }
+        }
+        catch (err) {
+          console.log(err);
+        }
+      } else {
+        alert("Comments must contain words.");
+      }
     } else {
       alert("You must be logged in to post a comment!");
     }
@@ -238,17 +267,23 @@ class BigCard extends Component {
     });
   }
 
+  handleInputChange(e) {
+    this.setState({
+      [e.target.name] : e.target.value
+    });
+  }
+
   render() {
     const tempImg =
       this.props.pinData.imageURL === undefined
         ? this.props.location.state.imgUrl
         : this.props.pinData.imageURL;
 
-    console.log(this.props.pinData);
     let commentCount = 0;
     if (this.props.pinData.comments !== undefined) {
       commentCount = this.props.pinData.comments.length;
     }
+
     return (
       <div
         className="outerTint"
@@ -296,6 +331,9 @@ class BigCard extends Component {
                 <CommentsBox>
                   {this.props.pinData.comments.map((comment, i) => CommentDiv(comment, i))}
                 </CommentsBox>
+                <span>
+                <textArea value={this.state.commentTextArea} className="commentTextArea" name="commentTextArea" onChange={this.handleInputChange} />
+                </span>
                 <AddCommentButton onClick={this.handleAddComment}>
                   Comment
                 </AddCommentButton>
