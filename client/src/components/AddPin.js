@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import "../style/Utils.css";
 import "../style/BigCard.css";
+import "../style/AddPin.css";
 
 class AddPin extends React.Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class AddPin extends React.Component {
     this.state = {
       title: "",
       imgURL: "",
-      description: ""
+      description: "",
+      previewImg: ""
     };
   }
 
@@ -33,16 +35,32 @@ class AddPin extends React.Component {
         });
       }
     }
+    else if (e.target.name === "imgURL") {
+      const httpRegEx = /^http/;
+      const siteRegEx = /.\.com|.\.org|.\.net.\.gov/;
+      if (httpRegEx.test(e.target.value) && siteRegEx.test(e.target.value)) {
+        this.setState({
+          [e.target.name] : e.target.value,
+          previewImg: e.target.value
+        });
+      } else {
+        this.setState({
+          [e.target.name] : e.target.value
+        });
+      }
+    }
     else {
       this.setState({
         [e.target.name] : e.target.value
       });
     }
+
+
   }
 
   async handleCreatePin() {
-    const { title, imgURL, description } = this.state;
-    if (!title || !imgURL || !description) {
+    const { title, imgURL, description, previewImg } = this.state;
+    if (!title || !imgURL || !description || !previewImg) {
       return alert("Please complete all forms before creating a new pin!");
     }
     try {
@@ -71,28 +89,40 @@ class AddPin extends React.Component {
     return (
       <div className="outerTint" onClick={this.handleReturnToSplash}>
         <div className="bigCard">
-          <input
-            name="title"
-            value={this.state.title}
-            onChange={this.handleInputChange}
-          />
-          <label for="title">Title</label>
-          <br />
+          <div className="eightByEightGrid">
+          <div
+            style={{backgroundImage: `url(${this.state.previewImg})`}}
+            title="Please enter an Image URL"
+            className="threeEighthsSpan threeEighthsTall previewImg"
+            />
+          <div className="fullTall" style={{"grid-column-start": "8"}}/>
+          <label className="halfSpan" for="imgURL" style={{"align-self": "end"}}>Image URL</label>
           <input
             name="imgURL"
             value={this.state.imgURL}
             onChange={this.handleInputChange}
+            className="inputLine halfSpan"
+            style={{"align-self": "start"}}
           />
-          <label for="imgURL">Image URL</label>
-          <br />
+          <div className="halfTall"/>
+          <label for="title" style={{"align-self": "end"}} className="quarterSpan">Title</label>
           <input
+            name="title"
+            value={this.state.title}
+            onChange={this.handleInputChange}
+            className="inputLine quarterSpan"
+            style={{"align-self": "end"}}
+          />
+          <div className="quarterSpan"/>
+          <label for="description" className="quarterSpan">Description</label>
+          <textarea
             name="description"
             value={this.state.description}
             onChange={this.handleInputChange}
+            className="quarterTall halfSpan inputBox"
           />
-          <label for="description">Description</label>
-          <br />
-          <button onClick={this.handleCreatePin}>Create Pin!</button>
+          <button className="createButton" onClick={this.handleCreatePin}>Create Pin!</button>
+          </div>
         </div>
       </div>
     );
