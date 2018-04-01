@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 let Pin = require("../models/Pin");
 let User = require("../models/User");
+var path = require('path');
 
 router.post("/new", (req, res, next) => {
   //TODO: Require all fields before the post will work.

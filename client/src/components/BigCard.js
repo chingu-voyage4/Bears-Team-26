@@ -308,7 +308,8 @@ class BigCard extends Component {
         </div>
         {this.state.lightboxOpen ? (
           <Lightbox
-            mainSrc={this.state.imgUrl}
+            mainSrc={tempImg}
+            imageCaption={this.props.pinData.description}
             onCloseRequest={() => {
               this.setState({ lightboxOpen: false });
             }}
