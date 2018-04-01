@@ -5,6 +5,7 @@ import styled from "styled-components";
 import "../style/Utils.css";
 import "../style/BigCard.css";
 import "../style/AddPin.css";
+import addImg from "../images/add.png";
 
 class AddPin extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class AddPin extends React.Component {
       title: "",
       imgURL: "",
       description: "",
-      previewImg: ""
+      previewImg: addImg
     };
   }
 
@@ -45,7 +46,8 @@ class AddPin extends React.Component {
         });
       } else {
         this.setState({
-          [e.target.name] : e.target.value
+          [e.target.name] : e.target.value,
+          previewImg: addImg
         });
       }
     }
@@ -60,7 +62,7 @@ class AddPin extends React.Component {
 
   async handleCreatePin() {
     const { title, imgURL, description, previewImg } = this.state;
-    if (!title || !imgURL || !description || !previewImg) {
+    if (!title || !imgURL || !description || previewImg === addImg) {
       return alert("Please complete all forms before creating a new pin!");
     }
     try {
@@ -91,7 +93,7 @@ class AddPin extends React.Component {
         <div className="bigCard">
           <div className="eightByEightGrid">
           <div
-            style={{backgroundImage: `url(${this.state.previewImg})`}}
+            style={{backgroundImage: `url(${this.state.previewImg})`, "background-size": (this.state.previewImg === addImg) ? "auto" : null}}
             title="Please enter an Image URL"
             className="threeEighthsSpan threeEighthsTall previewImg"
             />

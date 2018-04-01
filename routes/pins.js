@@ -89,4 +89,21 @@ router.post("/:id", function(req, res, next) {
   });
 });
 
+router.post("/comment/", function(req, res, next) {
+  Pin.findByIdAndUpdate(
+    req.body.id,
+     {$push: { comments: req.body.comment}},
+    (err, result) => {
+      if (err) {
+        res.json({
+          err: err
+        });
+      } else {
+        res.json({
+          message: "Comment added successfully"
+        });
+      }
+    });
+});
+
 module.exports = router;
