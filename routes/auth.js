@@ -18,11 +18,25 @@ router.get(
   passport.authenticate("twitter", {
     failureRedirect: "/login"
   }),
-  (req, res) => {
-    console.log(req.user);
-    console.log(req.query);
+  (req, res, next) => {
+    //console.log(req.user);
+    //console.log(req.query);
     res.redirect("/");
   }
 );
+
+router.get("/check/:id", (req, res, next) => {
+  console.log("Session", req.session);
+  const { _id } = req.session.passport.user;
+  if (_id) {
+    res.json({
+      isAuthenticated: true
+    });
+  } else {
+    res.json({
+      isAuthenticated: false
+    });
+  }
+});
 
 module.exports = router;

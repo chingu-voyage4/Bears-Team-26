@@ -7,11 +7,21 @@ import Login from "./Login";
 import Logout from "./Logout";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { attemptLoginAction, logoutAction } from "../store/actionTypes";
+import { loginAction, logoutAction } from "../store/actionTypes";
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.checkHasLoggedIn = this.checkHasLoggedIn.bind(this);
+  }
+
+  async checkHasLoggedIn() {
+    const json = await fetch("/auth/check/1");
+    console.log(json);
+  }
+
+  componentWillMount() {
+    this.checkHasLoggedIn();
   }
 
   render() {
@@ -45,7 +55,7 @@ const mapStateToProps = reduxState => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    ...bindActionCreators({ logoutAction }, dispatch)
+    ...bindActionCreators({ loginAction, logoutAction }, dispatch)
   };
 };
 
