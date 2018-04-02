@@ -5,7 +5,6 @@ let Board = require('../models/Board');
 let Pin = require('../models/Pin');
 /* GET home page. */
 router.get('/', function(req, res) {
-    //Return the logged in user's information
     if(req.isAuthenticated()){
         res.send(req.user);
     }
@@ -14,6 +13,16 @@ router.get('/', function(req, res) {
     }
 });
 
+router.get('/loginCheck',(req,res)=>{
+ //   console.log("ID LENGTH: "+req.user.id.length)
+    if(req.isAuthenticated()){
+        console.log("ID LENGTH: "+JSON.stringify(req.user))
+        res.send(req.user);
+    }
+    else{
+        res.send(null);
+    }
+})
 router.get('/boards', (req, res) => {
     //Get the Boards that the logged in user follows
     let board_to_follow = req.body.board_to_follow

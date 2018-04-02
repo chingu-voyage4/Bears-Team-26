@@ -18,7 +18,8 @@ let app = express();
 
 let mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost/test").catch(err => {
+var uri ="mongodb://"+process.env.US+":"+process.env.PASS+"@ds127958.mlab.com:27958/bears26";
+mongoose.connect(uri).catch(err => {
   console.log("Could not connect to MongoDB!", err.message);
 });
 
@@ -48,7 +49,7 @@ passport.use(
     {
       consumerKey: TWITTER_CONSUMER_KEY,
       consumerSecret: TWITTER_CONSUMER_SECRET,
-      callbackURL: "http://localhost:3000/auth/twitter/callback"
+      callbackURL: "http://localhost:5000/auth/twitter/callback"
     },
     function(token, tokenSecret, profile, done) {
       User.findOne({ twitterID: profile.id }, (err, result) => {
