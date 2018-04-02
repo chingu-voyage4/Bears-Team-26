@@ -41,5 +41,6 @@ const getPinDataAction = function(id) {
 
 module.exports = {
   logoutAction,
-  getPinDataAction
+  getPinDataAction,
+  loginAction
 };
