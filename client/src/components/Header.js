@@ -28,7 +28,7 @@ class Header extends React.Component {
             {this.props.isAuthenticated ? (
               <Login toggleAuthentication={this.props.logoutAction} />
             ) : (
-              <Logout toggleAuthentication={this.props.attemptLoginAction} />
+              <Logout />
             )}
           </div>
         </div>
@@ -45,7 +45,7 @@ const mapStateToProps = reduxState => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    ...bindActionCreators({ attemptLoginAction, logoutAction }, dispatch)
+    ...bindActionCreators({ logoutAction }, dispatch)
   };
 };
 

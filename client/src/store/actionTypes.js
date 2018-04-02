@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const loginAction = () => {
   return {
     type: "LOGIN"
@@ -7,18 +9,6 @@ const loginAction = () => {
 const logoutAction = () => {
   return {
     type: "LOGOUT"
-  };
-};
-
-const attemptLoginAction = () => {
-  return function(dispatch) {
-    //Will be used to get authentication from back end
-    let success = true;
-    if (success) {
-      dispatch(loginAction());
-    } else {
-      dispatch(logoutAction());
-    }
   };
 };
 
@@ -50,7 +40,6 @@ const getPinDataAction = function(id) {
 };
 
 module.exports = {
-  attemptLoginAction,
   logoutAction,
-  getPinDataAction,
+  getPinDataAction
 };
