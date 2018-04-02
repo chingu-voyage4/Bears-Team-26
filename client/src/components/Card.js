@@ -4,6 +4,7 @@ import share from "../images/share.png";
 import { LikeButton, ShareButton } from "./Utils.js";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 const ReportButton = styled.button`
   position: absolute;
@@ -85,7 +86,11 @@ class Card extends Component {
   }
 
   handleLike(event) {
-    alert("TODO: Add Like events");
+    if (this.props.isAuthenticated) {
+      alert("TODO: Add Like events");
+    } else {
+      alert("You must be logged in to like this Pin!");
+    }
     event.stopPropagation();
   }
 
@@ -151,4 +156,10 @@ class Card extends Component {
   }
 }
 
-export default withRouter(Card);
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.isAuthenticated
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(Card));
