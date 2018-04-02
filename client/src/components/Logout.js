@@ -5,7 +5,9 @@ const Logout = props => (
   <div className="header-login">
     <button
       className="header-button twitter-button"
-      onClick={props.toggleAuthentication}
+      onClick={function() {
+        window.location.href = "/auth/twitter";
+      }}
     >
       Login with Twitter
       <img className="logo twitter-img" src={twitterLogo} />

@@ -1,20 +1,28 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-let passport = require('passport');
-let session = require('express-session');
+let passport = require("passport");
+let session = require("express-session");
 
 // Redirect the user to Twitter for authentication.  When complete, Twitter
 // will redirect the user back to the application at
 //   /auth/twitter/callback
-router.get('/twitter', passport.authenticate('twitter'));
+router.get("/twitter", passport.authenticate("twitter"));
 
 // Twitter will redirect the user to this URL after approval.  Finish the
 // authentication process by attempting to obtain an access token.  If
 // access was granted, the user will be logged in.  Otherwise,
 // authentication has failed.
-router.get('/twitter/callback',
-    passport.authenticate('twitter', 
-    { successRedirect: '/',
-    failureRedirect: '/login' }));
+
+router.get(
+  "/twitter/callback",
+  passport.authenticate("twitter", {
+    failureRedirect: "/login"
+  }),
+  (req, res) => {
+    console.log(req.user);
+    console.log(req.query);
+    res.redirect("/");
+  }
+);
 
 module.exports = router;
