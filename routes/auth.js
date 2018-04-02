@@ -17,4 +17,8 @@ router.get('/twitter/callback',
     { successRedirect: '/',
     failureRedirect: '/login' }));
 
+router.get('/logout',(req,res)=>{
+    req.logout();
+    res.redirect("/");
+})
 module.exports = router;
