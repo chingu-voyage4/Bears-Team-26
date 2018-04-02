@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import "../style/BigCard.css";
+import "../style/Utils.css";
 import share from "../images/share.png";
 import { BigLikeButton, BigShareButton } from "./Utils.js";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import Lightbox from "react-image-lightbox";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { getPinDataAction } from "../store/actionTypes";
 
 const VisitButton = styled.button`
   position: relative;
@@ -147,42 +151,11 @@ const CommentLine = styled.span`
   }
 `;
 
-const sampleDate = new Date().toDateString();
-
-const commentsArr = [
-  {
-    id: 1,
-    user: "John Smith",
-    commentText: "Wow what a Cool Bear!",
-    postedOn: sampleDate
-  },
-  {
-    id: 2,
-    user: "Steve Johnson",
-    commentText: "Such an inspirational photo!",
-    postedOn: sampleDate
-  },
-  {
-    id: 3,
-    user: "Smarty Pants",
-    postedOn: sampleDate,
-    commentText: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-
-Curabitur sodales ligula in libero. Sed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor. Morbi lectus risus, iaculis vel, suscipit quis, luctus non, massa. Fusce ac turpis quis ligula lacinia aliquet. Mauris ipsum. Nulla metus metus, ullamcorper vel, tincidunt sed, euismod in, nibh.
-
-Quisque volutpat condimentum velit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam nec ante. Sed lacinia, urna non tincidunt mattis, tortor neque adipiscing diam, a cursus ipsum ante quis turpis. Nulla facilisi. Ut fringilla. Suspendisse potenti. Nunc feugiat mi a tellus consequat imperdiet. Vestibulum sapien. Proin quam. Etiam ultrices. Suspendisse in justo eu magna luctus suscipit. Sed lectus. Integer euismod lacus luctus magna.
-
-Quisque cursus, metus vitae pharetra auctor, sem massa mattis sem, at interdum magna augue eget diam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi lacinia molestie dui. Praesent blandit dolor. Sed non quam. In vel mi sit amet augue congue elementum. Morbi in ipsum sit amet pede facilisis laoreet. Donec lacus nunc, viverra nec, blandit vel, egestas et, augue. Vestibulum tincidunt malesuada tellus. Ut ultrices ultrices enim. Curabitur sit amet mauris. Morbi in dui quis est pulvinar ullamcorper.
-
-Nulla facilisi. Integer lacinia sollicitudin massa. Cras metus. Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue. Proin sodales libero eget ante. Nulla quam. Aenean laoreet. Vestibulum nisi lectus, commodo ac, facilisis ac, ultricies eu, pede. Ut orci risus, accumsan porttitor, cursus quis, aliquet eget, justo. Sed pretium blandit orci. Ut eu diam at pede suscipit sodales. `
-  }
-];
-
-function CommentDiv(comment) {
-  const { user, commentText, postedOn, id } = comment;
+function CommentDiv(comment, i) {
+  const { user, commentText, postedOn } = comment;
   return (
-    <CommentLine key={id}>
-      {user} "{commentText}" <br /> on {postedOn.substring(4)}
+    <CommentLine key={i}>
+      {user} "{commentText}" <br /> on {postedOn.toDateString().substring(4)}
     </CommentLine>
   );
 }
@@ -201,7 +174,8 @@ class BigCard extends Component {
     this.state = {
       commentsVisible: false,
       lightboxOpen: false,
-      imgUrl: ""
+      imgUrl: "",
+      id: window.location.pathname.substring(5)
     };
   }
 
@@ -215,7 +189,11 @@ class BigCard extends Component {
   }
 
   handleLike(event) {
-    alert("TODO: Add Like events");
+    if (this.props.isAuthenticated) {
+      alert("TODO: Add Like events");
+    } else {
+      alert("You must be logged in to like this Pin!");
+    }
     event.stopPropagation();
   }
 
@@ -237,32 +215,40 @@ class BigCard extends Component {
   handleReturnToSplash(e) {
     e.stopPropagation();
     if (e.target.className === "outerTint") {
-      return this.props.history.goBack(); //Now that's a handy function haha
+      return this.props.history.push("/");
     }
   }
 
-  handleAddComment() {}
+  handleAddComment() {
+    if (this.props.isAuthenticated) {
+    } else {
+      alert("You must be logged in to post a comment!");
+    }
+  }
 
   handleExpandPicture() {
     this.setState({ lightboxOpen: true });
   }
 
   getPinData() {
-    const tempImg =
-      this.props.location.state !== undefined
-        ? this.props.location.state.imgUrl
-        : "";
-    //Will eventually be used to get the pin's info from the back-end
+    this.props.getPinDataAction(this.state.id);
+    //Only one more prop to go!
     this.setState({
-      comments: commentsArr,
       postedBy: "John Smith",
-      postedOn: sampleDate,
-      commentCount: Object.keys(commentsArr).length,
-      imgUrl: tempImg
     });
   }
 
   render() {
+    const tempImg =
+      this.props.pinData.imageURL === undefined
+        ? this.props.location.state.imgUrl
+        : this.props.pinData.imageURL;
+
+    console.log(this.props.pinData);
+    let commentCount = 0;
+    if (this.props.pinData.comments !== undefined) {
+      commentCount = this.props.pinData.comments.length;
+    }
     return (
       <div
         className="outerTint"
@@ -285,11 +271,12 @@ class BigCard extends Component {
                 alt="Share!"
               />
             </BigShareButton>
+            <h2 className="title">{this.props.pinData.title}</h2>
             <BigLikeButton onClick={this.handleLike}>Like!</BigLikeButton>
           </span>
           <div
             className="bigPic"
-            style={{ backgroundImage: `url(${this.state.imgUrl})` }}
+            style={{ backgroundImage: `url(${tempImg})` }}
             onClick={this.handleExpandPicture}
           />
           <VisitButton onClick={this.handleVisit}>Visit</VisitButton>
@@ -301,13 +288,13 @@ class BigCard extends Component {
             }}
           >
             <CommentsSpan id="CommentsSpan">
-              {this.state.commentCount} Comments
+              {commentCount} Comments
               <ViewMore onClick={this.handleViewMoreComments}>...</ViewMore>
             </CommentsSpan>
             {this.state.commentsVisible ? (
               <span>
                 <CommentsBox>
-                  {this.state.comments.map(comment => CommentDiv(comment))}
+                  {this.props.pinData.comments.map((comment, i) => CommentDiv(comment, i))}
                 </CommentsBox>
                 <AddCommentButton onClick={this.handleAddComment}>
                   Comment
@@ -316,7 +303,7 @@ class BigCard extends Component {
             ) : null}
           </CommentsBar>
           <PostedSpan>
-            Posted By {this.state.postedBy} on {this.state.postedOn}
+            Posted By {this.state.postedBy} on {this.props.pinData.postedOn}
           </PostedSpan>
         </div>
         {this.state.lightboxOpen ? (
@@ -332,4 +319,19 @@ class BigCard extends Component {
   }
 }
 
-export default withRouter(BigCard);
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.isAuthenticated,
+    pinData: state.pinData
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    ...bindActionCreators({ getPinDataAction }, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withRouter(BigCard)
+);

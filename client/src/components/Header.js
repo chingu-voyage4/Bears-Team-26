@@ -5,20 +5,13 @@ import twitterLogo from "../images/TwitterLogo.png";
 import Navbar from "../style/Navbar.css";
 import Login from "./Login";
 import Logout from "./Logout";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { loginAction, logoutAction } from "../store/actionTypes";
 
-export default class Header extends React.Component {
+class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isAuthenticated: false
-    };
-  }
-
-  toggleAuthentication() {
-    this.setState({
-      isAuthenticated: !this.state.isAuthenticated
-    });
-    console.log("Logout Successful");
   }
 
   render() {
@@ -32,12 +25,10 @@ export default class Header extends React.Component {
             </NavLink>
           </div>
           <div className="header-selection">
-            {!this.state.isAuthenticated ? (
-              <Login toggleAuthentication={() => this.toggleAuthentication()} />
+            {this.props.isAuthenticated ? (
+              <Login toggleAuthentication={this.props.logoutAction} />
             ) : (
-              <Logout
-                toggleAuthentication={() => this.toggleAuthentication()}
-              />
+              <Logout toggleAuthentication={this.props.loginAction} />
             )}
           </div>
         </div>
@@ -45,3 +36,17 @@ export default class Header extends React.Component {
     );
   }
 }
+
+const mapStateToProps = reduxState => {
+  return {
+    isAuthenticated: reduxState.isAuthenticated
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    ...bindActionCreators({ loginAction, logoutAction }, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

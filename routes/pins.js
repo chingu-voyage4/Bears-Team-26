@@ -2,20 +2,29 @@ var express = require("express");
 var router = express.Router();
 let Pin = require("../models/Pin");
 let User = require("../models/User");
-router.post("/", (req, res) => {
+
+router.post("/new", (req, res, next) => {
   //TODO: Require all fields before the post will work.
-  let title = req.body.title ? req.body.title : "none";
-  let imageURL = req.body.imageURL;
-  let description = req.body.description;
+  const {
+    title,
+    imageURL,
+    description,
+    postedOn
+  } = req.body;
+
   let newPin = new Pin({
     likes: [],
     shares: [],
     title: title,
     imageURL: imageURL,
     description: description,
-    creator: req.user._id
+    comments: [],
+    postedOn: postedOn
   });
+  //creator: req.user._id
+  //No user id on front end yet
   newPin.save((err, result) => {
+    /*
     User.findById(req.user._id, (error, user) => {
       user.pins.push(result._id);
       user.save();
@@ -24,9 +33,18 @@ router.post("/", (req, res) => {
         result: result
       });
     });
+    */
+    if (err) {
+      return res.json({err: err});
+    } else {
+      res.json({
+        result: result._id
+      });
+    }
   });
 });
-router.delete("/:id", (err, res) => {
+
+router.delete("/:id", (err, res, next) => {
   //TODO: Ensure that a user has permission to delete this pin.
   Pin.findByIdAndRemove(req.params.id, (err, result) => {
     res.json({
@@ -54,6 +72,20 @@ router.get("/:id", function(req, res, next) {
   */
   const build = path.join(__dirname, "../client/dist/", "index.html");
   res.sendFile(build);
+});
+
+router.post("/:id", function(req, res, next) {
+  Pin.findById(req.params.id, (err, result) => {
+    if (err) {
+      res.json({
+        err: err
+      });
+    } else {
+      res.json({
+        result: result
+      });
+    }
+  });
 });
 
 module.exports = router;

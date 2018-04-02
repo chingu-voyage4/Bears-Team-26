@@ -1,0 +1,7 @@
+.outerTint {
+  position: relative;
+  width: 100%;
+  height: 800px;
+  background-color: rgba(0, 0, 20, 0.8);
+  transition: height 0.4s;
+}
