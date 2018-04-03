@@ -18,7 +18,8 @@ let app = express();
 
 let mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost/test").catch(err => {
+var uri ="mongodb://"+process.env.US+":"+process.env.PASS+"@ds127958.mlab.com:27958/bears26";
+mongoose.connect(uri).catch(err => {
   console.log("Could not connect to MongoDB!", err.message);
 });
 
