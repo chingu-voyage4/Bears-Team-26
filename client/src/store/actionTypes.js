@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const loginAction = () => {
+const loginAction = user => {
   return {
-    type: "LOGIN"
+    type: "LOGIN",
+    user: user
   };
 };
 

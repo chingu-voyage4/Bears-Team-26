@@ -234,7 +234,7 @@ class BigCard extends Component {
             },
             body: JSON.stringify({
               comment: {
-                commenterName: this.state.postedBy,
+                commenterName: this.props.user.displayName,
                 commentText: this.state.commentTextArea,
                 postedOn: new Date().toDateString()
               },
@@ -245,8 +245,7 @@ class BigCard extends Component {
           if (json.message) {
             this.getPinData();
           }
-        }
-        catch (err) {
+        } catch (err) {
           console.log(err);
         }
       } else {
@@ -263,15 +262,11 @@ class BigCard extends Component {
 
   getPinData() {
     this.props.getPinDataAction(this.state.id);
-    //Only one more prop to go!
-    this.setState({
-      postedBy: "John Smith",
-    });
   }
 
   handleInputChange(e) {
     this.setState({
-      [e.target.name] : e.target.value
+      [e.target.name]: e.target.value
     });
   }
 
@@ -331,10 +326,17 @@ class BigCard extends Component {
             {this.state.commentsVisible ? (
               <span>
                 <CommentsBox>
-                  {this.props.pinData.comments.map((comment, i) => CommentDiv(comment, i))}
+                  {this.props.pinData.comments.map((comment, i) =>
+                    CommentDiv(comment, i)
+                  )}
                 </CommentsBox>
                 <span>
-                <textArea value={this.state.commentTextArea} className="commentTextArea" name="commentTextArea" onChange={this.handleInputChange} />
+                  <textArea
+                    value={this.state.commentTextArea}
+                    className="commentTextArea"
+                    name="commentTextArea"
+                    onChange={this.handleInputChange}
+                  />
                 </span>
                 <AddCommentButton onClick={this.handleAddComment}>
                   Comment
@@ -343,7 +345,8 @@ class BigCard extends Component {
             ) : null}
           </CommentsBar>
           <PostedSpan>
-            Posted By {this.state.postedBy} on {this.props.pinData.postedOn}
+            Posted By {this.props.pinData.creator} on{" "}
+            {this.props.pinData.postedOn}
           </PostedSpan>
         </div>
         {this.state.lightboxOpen ? (
@@ -363,7 +366,8 @@ class BigCard extends Component {
 const mapStateToProps = state => {
   return {
     isAuthenticated: state.isAuthenticated,
-    pinData: state.pinData
+    pinData: state.pinData,
+    user: state.user
   };
 };
 

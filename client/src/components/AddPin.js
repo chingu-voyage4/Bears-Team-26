@@ -1,5 +1,5 @@
 import React from "react";
-import createRef from 'create-react-ref/lib/createRef';
+import createRef from "create-react-ref/lib/createRef";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import styled from "styled-components";
@@ -35,29 +35,31 @@ class AddPin extends React.Component {
     if (e.target.name === "title") {
       if (e.target.value.length <= 15) {
         this.setState({
-          [e.target.name] : e.target.value
+          [e.target.name]: e.target.value
         });
       }
-    }
-    else if (e.target.name === "imgURL") {
+    } else if (e.target.name === "imgURL") {
       const httpRegEx = /^http/;
       const siteRegEx = /.\.com|.\.org|.\.net.\.gov/;
       const imgRegEx = /\.jpg|jpeg|\.bmp|\.gif\.png/;
-      if (httpRegEx.test(e.target.value) && siteRegEx.test(e.target.value) && imgRegEx.test(e.target.value)) {
+      if (
+        httpRegEx.test(e.target.value) &&
+        siteRegEx.test(e.target.value) &&
+        imgRegEx.test(e.target.value)
+      ) {
         this.setState({
-          [e.target.name] : e.target.value,
+          [e.target.name]: e.target.value,
           previewImg: e.target.value
         });
       } else {
         this.setState({
-          [e.target.name] : e.target.value,
+          [e.target.name]: e.target.value,
           previewImg: addImg
         });
       }
-    }
-    else {
+    } else {
       this.setState({
-        [e.target.name] : e.target.value
+        [e.target.name]: e.target.value
       });
     }
   }
@@ -71,6 +73,9 @@ class AddPin extends React.Component {
     if (!title || !imgURL || !description || previewImg === addImg) {
       return alert("Please complete all forms before creating a new pin!");
     }
+    if (!this.props.isAuthenticated) {
+      return alert("You must be logged in to create pins!");
+    }
     try {
       const response = await fetch("/pin/new", {
         method: "POST",
@@ -81,12 +86,16 @@ class AddPin extends React.Component {
           title: title,
           imageURL: imgURL,
           description: description,
-          postedOn: new Date().toDateString()
+          postedOn: new Date().toDateString(),
+          creator: this.props.user.displayName
         })
       });
       const json = await response.json();
       const { result } = json;
-      return this.props.history.push({pathname: `/pin/${result}`, state: {imgUrl:imgURL}});
+      return this.props.history.push({
+        pathname: `/pin/${result}`,
+        state: { imgUrl: imgURL }
+      });
     } catch (err) {
       console.log(err);
       return alert("There was an error creating new pin!");
@@ -98,40 +107,60 @@ class AddPin extends React.Component {
       <div className="outerTint" onClick={this.handleReturnToSplash}>
         <div className="bigCard">
           <div className="eightByEightGrid">
-          <div
-            onClick={this.focusUrlInput}
-            style={{backgroundImage: `url(${this.state.previewImg})`, "background-size": (this.state.previewImg === addImg) ? "auto" : null}}
-            title="Please enter an Image URL"
-            className="threeEighthsSpan threeEighthsTall previewImg"
+            <div
+              onClick={this.focusUrlInput}
+              style={{
+                backgroundImage: `url(${this.state.previewImg})`,
+                "background-size":
+                  this.state.previewImg === addImg ? "auto" : null
+              }}
+              title="Please enter an Image URL"
+              className="threeEighthsSpan threeEighthsTall previewImg"
             />
-          <div className="fullTall" style={{"grid-column-start": "8"}}/>
-          <label className="halfSpan" for="imgURL" style={{"align-self": "end"}}>Image URL</label>
-          <input
-            name="imgURL"
-            value={this.state.imgURL}
-            onChange={this.handleInputChange}
-            className="inputLine halfSpan"
-            style={{"align-self": "start"}}
-            ref={this.imgUrlInput}
-          />
-          <div className="halfTall"/>
-          <label for="title" style={{"align-self": "end"}} className="quarterSpan">Title</label>
-          <input
-            name="title"
-            value={this.state.title}
-            onChange={this.handleInputChange}
-            className="inputLine quarterSpan"
-            style={{"align-self": "end"}}
-          />
-          <div className="quarterSpan"/>
-          <label for="description" className="quarterSpan">Description</label>
-          <textarea
-            name="description"
-            value={this.state.description}
-            onChange={this.handleInputChange}
-            className="quarterTall halfSpan inputBox"
-          />
-          <button className="createButton" onClick={this.handleCreatePin}>Create Pin!</button>
+            <div className="fullTall" style={{ "grid-column-start": "8" }} />
+            <label
+              className="halfSpan"
+              for="imgURL"
+              style={{ "align-self": "end" }}
+            >
+              Image URL
+            </label>
+            <input
+              name="imgURL"
+              value={this.state.imgURL}
+              onChange={this.handleInputChange}
+              className="inputLine halfSpan"
+              style={{ "align-self": "start" }}
+              ref={this.imgUrlInput}
+            />
+            <div className="halfTall" />
+            <label
+              for="title"
+              style={{ "align-self": "end" }}
+              className="quarterSpan"
+            >
+              Title
+            </label>
+            <input
+              name="title"
+              value={this.state.title}
+              onChange={this.handleInputChange}
+              className="inputLine quarterSpan"
+              style={{ "align-self": "end" }}
+            />
+            <div className="quarterSpan" />
+            <label for="description" className="quarterSpan">
+              Description
+            </label>
+            <textarea
+              name="description"
+              value={this.state.description}
+              onChange={this.handleInputChange}
+              className="quarterTall halfSpan inputBox"
+            />
+            <button className="createButton" onClick={this.handleCreatePin}>
+              Create Pin!
+            </button>
           </div>
         </div>
       </div>
@@ -139,4 +168,11 @@ class AddPin extends React.Component {
   }
 }
 
-export default AddPin;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    isAuthenticated: state.isAuthenticated
+  };
+};
+
+export default connect(mapStateToProps)(AddPin);
