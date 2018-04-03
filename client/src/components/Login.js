@@ -29,9 +29,12 @@ class Login extends React.Component {
           >
           <img className="nav-img" src={notification} />
         </BigShareButton>
-        <button onClick={this.props.toggleAuthentication} className="logout">
-          Logout
-        </button>
+    
+        <form className="inline" method = "GET" action = "/auth/logout">
+          <button className="logout" type="submit">
+            Logout
+          </button>
+        </form>
       </div>
     );
   }
