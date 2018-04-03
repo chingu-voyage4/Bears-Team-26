@@ -18,12 +18,11 @@ class Login extends React.Component {
   render() {
     return (
       <div className="header-login">
-        <BigShareButton>
+        <BigShareButton onClick={this.handleGoToNewPin}>
           <img
             height="100%"
             style={{ transition: "all 0.4s" }}
             src={add}
-            onClick={this.handleGoToNewPin}
           />
         </BigShareButton>
         <BigShareButton>

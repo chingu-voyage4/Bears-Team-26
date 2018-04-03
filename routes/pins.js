@@ -2,15 +2,11 @@ var express = require("express");
 var router = express.Router();
 let Pin = require("../models/Pin");
 let User = require("../models/User");
+var path = require("path");
 
 router.post("/new", (req, res, next) => {
   //TODO: Require all fields before the post will work.
-  const {
-    title,
-    imageURL,
-    description,
-    postedOn
-  } = req.body;
+  const { title, imageURL, description, postedOn, creator } = req.body;
 
   let newPin = new Pin({
     likes: [],
@@ -19,7 +15,8 @@ router.post("/new", (req, res, next) => {
     imageURL: imageURL,
     description: description,
     comments: [],
-    postedOn: postedOn
+    postedOn: postedOn,
+    creator: creator
   });
   //creator: req.user._id
   //No user id on front end yet
@@ -35,7 +32,7 @@ router.post("/new", (req, res, next) => {
     });
     */
     if (err) {
-      return res.json({err: err});
+      return res.json({ err: err });
     } else {
       res.json({
         result: result._id
@@ -59,6 +56,7 @@ router.patch("/:id", function(req, res, next) {
 });
 
 router.get("/:id", function(req, res, next) {
+  console.log(req.session);
   //Return a pin's information
   //I'm commenting this out because it isn't triggered when someone clicks
   //a link in react, only when a user refreshes their page.
@@ -86,6 +84,24 @@ router.post("/:id", function(req, res, next) {
       });
     }
   });
+});
+
+router.post("/comment/:id", function(req, res, next) {
+  Pin.findByIdAndUpdate(
+    req.body.id,
+    { $push: { comments: req.body.comment } },
+    (err, result) => {
+      if (err) {
+        res.json({
+          err: err
+        });
+      } else {
+        res.json({
+          message: "Comment added successfully"
+        });
+      }
+    }
+  );
 });
 
 module.exports = router;

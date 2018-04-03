@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/chingu-voyage4/Bears-Team-26#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "css-loader": "^0.28.10",
     "jest": "^22.4.3",
     "react-image-lightbox": "^4.6.0",

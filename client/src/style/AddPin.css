@@ -1,0 +1,102 @@
+.eightByEightGrid {
+  display: grid;
+  width: 85%;
+  height: 100%;
+  grid-template: repeat(8, 12.5%) / repeat(8, 12.5%);
+  grid-gap: 10px;
+  align-items: center;
+}
+
+.eightByEightGrid label {
+  font-family: "Alegreya", serif;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: rgba(0, 0, 40, 1);
+  border-bottom: 1px solid rgba(0, 0, 40, 0.5);
+}
+
+.eightByEightGrid * {
+  margin-left: 20px;
+}
+
+.halfSpan {
+  grid-column: span 4;
+}
+
+.fullSpan {
+  grid-column: span 8;
+}
+
+.quarterSpan {
+  grid-column: span 2;
+}
+
+.threeQuarterSpan {
+  grid-column: span 6;
+}
+
+.threeEighthsSpan {
+  grid-column: span 3;
+}
+
+.fiveEighthsSpan {
+  grid-column: span 5;
+}
+
+.threeEighthsTall {
+  grid-row: span 3;
+}
+
+.halfTall {
+  grid-row: span 4;
+}
+
+.quarterTall {
+  grid-row: span 2;
+}
+
+.fullTall {
+  grid-row: span 8;
+}
+
+.previewImg {
+  height: 100%;
+  width: 100%;
+  border: 1px hidden;
+  border-radius: 15px;
+  box-shadow: 0 0 20px black;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-top: 30px;
+}
+
+.inputLine {
+  height: 2em;
+  width: 80%;
+}
+
+.inputBox {
+  width: 90%;
+  height: 80%;
+}
+
+.createButton {
+  padding: 10px;
+  border: 1px hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 40, 0.8);
+  grid-column: 6 / span 2;
+  grid-row: 7 / span 1;
+  font-family: "Alegreya", serif;
+  background: inherit;
+  color: rgba(0, 0, 40, 0.8);
+  font-weight: 600;
+  font-size: 1.2em;
+  transition: all 0.4s;
+}
+
+.createButton:hover {
+  color: white;
+  background:rgba(0, 10, 60, 0.8);
+}
