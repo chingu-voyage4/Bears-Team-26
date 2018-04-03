@@ -8,6 +8,13 @@ import "../style/BigCard.css";
 import "../style/AddPin.css";
 import addImg from "../images/add.png";
 
+const checkImgUrl = url => {
+  const httpRegEx = /^http/;
+  const siteRegEx = /.\.com|.\.org|.\.net.\.gov/;
+  const imgRegEx = /\.jpg|jpeg|\.bmp|\.gif\.png/;
+  return httpRegEx.test(url) && siteRegEx.test(url) && imgRegEx.test(url);
+};
+
 class AddPin extends React.Component {
   constructor(props) {
     super(props);
@@ -39,14 +46,7 @@ class AddPin extends React.Component {
         });
       }
     } else if (e.target.name === "imgURL") {
-      const httpRegEx = /^http/;
-      const siteRegEx = /.\.com|.\.org|.\.net.\.gov/;
-      const imgRegEx = /\.jpg|jpeg|\.bmp|\.gif\.png/;
-      if (
-        httpRegEx.test(e.target.value) &&
-        siteRegEx.test(e.target.value) &&
-        imgRegEx.test(e.target.value)
-      ) {
+      if (checkImgUrl(e.target.value)) {
         this.setState({
           [e.target.name]: e.target.value,
           previewImg: e.target.value
@@ -70,7 +70,12 @@ class AddPin extends React.Component {
 
   async handleCreatePin() {
     const { title, imgURL, description, previewImg } = this.state;
-    if (!title || !imgURL || !description || previewImg === addImg) {
+    if (
+      !title ||
+      !imgURL ||
+      !description ||
+      (previewImg === addImg || !checkImgUrl(previewImg))
+    ) {
       return alert("Please complete all forms before creating a new pin!");
     }
     if (!this.props.isAuthenticated) {
