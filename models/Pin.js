@@ -1,19 +1,16 @@
-let mongoose = require('mongoose');
+let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
-let User = require('./User')
+let User = require("./User");
 let pinSchema = new Schema({
+  likes: [{ type: Schema.Types.ObjectId, ref: "User" }], //Only store the ID of the liked and shared users.
+  shares: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  title: String,
+  imageURL: String,
+  description: String,
+  comments: [{ commenterName: String, commentText: String, postedOn: String }],
+  creator: String,
+  postedOn: String
+});
 
-    likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],//Only store the ID of the liked and shared users.
-    shares: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    title: String,
-    imageURL: String,
-    description: String,
-    comments: [{ commenterName: String, commentText: String, postedOn: String}],
-    creator: { type: Schema.Types.ObjectId, ref: 'User' },
-    postedOn: String
-
-  });
-
-
-var Pin = mongoose.model('Pin', pinSchema);
+var Pin = mongoose.model("Pin", pinSchema);
 module.exports = Pin;

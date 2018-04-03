@@ -1,6 +1,7 @@
 const initialState = {
   isAuthenticated: false,
-  pinData: {}
+  pinData: {},
+  user: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -8,7 +9,8 @@ const reducer = (state = initialState, action) => {
     case "LOGIN":
       return {
         ...state,
-        isAuthenticated: true
+        isAuthenticated: true,
+        user: action.user
       };
     case "LOGOUT":
       return {

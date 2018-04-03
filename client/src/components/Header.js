@@ -12,11 +12,8 @@ import { loginAction, logoutAction } from "../store/actionTypes";
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    //needs converted into redux.
-    this.state = {
-      authenticated: false
-    };
   }
+
   componentDidMount() {
     fetch("/me/loginCheck", {
       method: "get",
@@ -30,12 +27,14 @@ class Header extends React.Component {
       .then(response => {
         return response.json();
       })
-      .then(data => {
-        data != null
-          ? this.setState({ authenticated: true })
-          : this.setState({ authenticated: false });
+      .then(user => {
+        user != null ? this.props.loginAction(user) : this.props.logoutAction();
+      })
+      .catch(err => {
+        console.log(err);
       });
   }
+
   render() {
     return (
       <header>
@@ -47,16 +46,7 @@ class Header extends React.Component {
             </NavLink>
           </div>
           <div className="header-selection">
-            {//this.props.isAuthenticated ? (
-            this.state.authenticated ? (
-              //Commented out components are those done with redux and will
-              //be the ones used after redux is applied
-              // <Login toggleAuthentication={this.props.logoutAction} />
-              <Login />
-            ) : (
-              // <Logout toggleAuthentication={this.props.loginAction} />
-              <Logout authenticated={this.state.authenticated} />
-            )}
+            {this.props.isAuthenticated ? <Login /> : <Logout />}
           </div>
         </div>
       </header>

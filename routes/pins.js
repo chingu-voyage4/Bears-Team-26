@@ -6,7 +6,7 @@ var path = require("path");
 
 router.post("/new", (req, res, next) => {
   //TODO: Require all fields before the post will work.
-  const { title, imageURL, description, postedOn } = req.body;
+  const { title, imageURL, description, postedOn, creator } = req.body;
 
   let newPin = new Pin({
     likes: [],
@@ -15,7 +15,8 @@ router.post("/new", (req, res, next) => {
     imageURL: imageURL,
     description: description,
     comments: [],
-    postedOn: postedOn
+    postedOn: postedOn,
+    creator: creator
   });
   //creator: req.user._id
   //No user id on front end yet
