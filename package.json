@@ -23,6 +23,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "concurrently": "^3.5.1",
+    "create-react-ref": "^0.1.0",
     "css-loader": "^0.28.10",
     "mongoose-findorcreate": "^3.0.0",
     "nodemon": "^1.17.2",

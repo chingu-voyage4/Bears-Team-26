@@ -152,10 +152,10 @@ const CommentLine = styled.span`
 `;
 
 function CommentDiv(comment, i) {
-  const { user, commentText, postedOn } = comment;
+  const { commenterName, commentText, postedOn } = comment;
   return (
     <CommentLine key={i}>
-      {user} "{commentText}" <br /> on {postedOn.toDateString().substring(4)}
+      {commenterName} "{commentText}" <br /> on {postedOn.substring(4)}
     </CommentLine>
   );
 }
@@ -171,11 +171,13 @@ class BigCard extends Component {
     this.handleReturnToSplash = this.handleReturnToSplash.bind(this);
     this.handleAddComment = this.handleAddComment.bind(this);
     this.handleExpandPicture = this.handleExpandPicture.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.state = {
       commentsVisible: false,
       lightboxOpen: false,
       imgUrl: "",
-      id: window.location.pathname.substring(5)
+      id: window.location.pathname.substring(5),
+      commentTextArea: ""
     };
   }
 
@@ -203,7 +205,9 @@ class BigCard extends Component {
 
   handleViewMoreComments(event) {
     event.stopPropagation();
-    this.setState(this.toggleCommentVisibility);
+    if (this.props.pinData.comments) {
+      this.setState(this.toggleCommentVisibility);
+    }
   }
 
   toggleCommentVisibility(state) {
@@ -219,8 +223,34 @@ class BigCard extends Component {
     }
   }
 
-  handleAddComment() {
+  async handleAddComment() {
     if (this.props.isAuthenticated) {
+      if (this.state.commentTextArea) {
+        try {
+          const response = await fetch(`/pin/comment/${this.state.id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              comment: {
+                commenterName: this.props.user.displayName,
+                commentText: this.state.commentTextArea,
+                postedOn: new Date().toDateString()
+              },
+              id: this.state.id
+            })
+          });
+          const json = await response.json();
+          if (json.message) {
+            this.getPinData();
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        alert("Comments must contain words.");
+      }
     } else {
       alert("You must be logged in to post a comment!");
     }
@@ -232,9 +262,11 @@ class BigCard extends Component {
 
   getPinData() {
     this.props.getPinDataAction(this.state.id);
-    //Only one more prop to go!
+  }
+
+  handleInputChange(e) {
     this.setState({
-      postedBy: "John Smith",
+      [e.target.name]: e.target.value
     });
   }
 
@@ -244,11 +276,11 @@ class BigCard extends Component {
         ? this.props.location.state.imgUrl
         : this.props.pinData.imageURL;
 
-    console.log(this.props.pinData);
     let commentCount = 0;
     if (this.props.pinData.comments !== undefined) {
       commentCount = this.props.pinData.comments.length;
     }
+
     return (
       <div
         className="outerTint"
@@ -294,8 +326,18 @@ class BigCard extends Component {
             {this.state.commentsVisible ? (
               <span>
                 <CommentsBox>
-                  {this.props.pinData.comments.map((comment, i) => CommentDiv(comment, i))}
+                  {this.props.pinData.comments.map((comment, i) =>
+                    CommentDiv(comment, i)
+                  )}
                 </CommentsBox>
+                <span>
+                  <textArea
+                    value={this.state.commentTextArea}
+                    className="commentTextArea"
+                    name="commentTextArea"
+                    onChange={this.handleInputChange}
+                  />
+                </span>
                 <AddCommentButton onClick={this.handleAddComment}>
                   Comment
                 </AddCommentButton>
@@ -303,12 +345,14 @@ class BigCard extends Component {
             ) : null}
           </CommentsBar>
           <PostedSpan>
-            Posted By {this.state.postedBy} on {this.props.pinData.postedOn}
+            Posted By {this.props.pinData.creator} on{" "}
+            {this.props.pinData.postedOn}
           </PostedSpan>
         </div>
         {this.state.lightboxOpen ? (
           <Lightbox
-            mainSrc={this.state.imgUrl}
+            mainSrc={tempImg}
+            imageCaption={this.props.pinData.description}
             onCloseRequest={() => {
               this.setState({ lightboxOpen: false });
             }}
@@ -322,7 +366,8 @@ class BigCard extends Component {
 const mapStateToProps = state => {
   return {
     isAuthenticated: state.isAuthenticated,
-    pinData: state.pinData
+    pinData: state.pinData,
+    user: state.user
   };
 };
 

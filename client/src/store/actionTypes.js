@@ -1,6 +1,7 @@
-const loginAction = () => {
+const loginAction = user => {
   return {
-    type: "LOGIN"
+    type: "LOGIN",
+    user: user
   };
 };
 
@@ -38,8 +39,7 @@ const getPinDataAction = function(id) {
 };
 
 module.exports = {
-  loginAction,
   logoutAction,
   getPinDataAction,
-  setPinStateDataAction
+  loginAction
 };
