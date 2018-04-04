@@ -27,8 +27,10 @@
 
 .title {
   position: absolute;
-  margin: 20px 200px 5px 150px;
+  margin: 20px 200px 10px 100px;
   font-family: "Alegreya", serif;
+  top: -5px;
+  transition: all 0.4s;
 }
 
 .commentTextArea {
@@ -36,9 +38,39 @@
   width: 55%;
 }
 
+.profilePic {
+  height: 50px;
+  width: 50px;
+  border: 1px hidden;
+  border-radius: 50%;
+  margin-right: 5px;
+  float: left;
+}
+
+.commenterNameSpan {
+  padding: 0 5px 2px 5px;
+  font-size: 1.1em;
+  font-family: "Alegreya", serif;
+  font-weight: 600;
+  border-right: 1px solid rgba(122, 140, 143, 0.6);
+  border-bottom: 2px solid rgba(122, 140, 143, 0.6);
+  border-radius: 14px;
+  white-space: nowrap;
+  display: inline-block;
+  background: #d4e6e8;
+  color: rgb(55, 86, 116);
+  margin: 0 5px 2px 5px;
+}
+
 @media (min-width: 480px) {
   .bigPic {
     height: 50%;
     margin-top: 12%;
+  }
+}
+
+@media (min-width: 540px) {
+  .title {
+    margin: 20px 200px 5px 150px;
   }
 }
