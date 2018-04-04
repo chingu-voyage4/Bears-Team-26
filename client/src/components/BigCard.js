@@ -136,7 +136,7 @@ const CommentsBox = styled.div`
 const CommentLine = styled.span`
   width: 80%;
   display: inline-block;
-  text-overflow: ellipsis;
+  overflow-wrap: break-word;
   box-shadow: 0 0 1px #7a8c8f;
   margin: 5px 0 5px 10px;
   padding: 5px 35px 5px 10px;
@@ -152,10 +152,12 @@ const CommentLine = styled.span`
 `;
 
 function CommentDiv(comment, i) {
-  const { commenterName, commentText, postedOn } = comment;
+  const { commenterName, commentText, postedOn, profilePic } = comment;
   return (
     <CommentLine key={i}>
-      {commenterName} "{commentText}" <br /> on {postedOn.substring(4)}
+      <img className="profilePic" src={profilePic} />
+      <span className="commenterNameSpan">{commenterName}</span>
+      "{commentText}" <br /> on {postedOn.substring(4)}
     </CommentLine>
   );
 }
@@ -175,7 +177,6 @@ class BigCard extends Component {
     this.state = {
       commentsVisible: false,
       lightboxOpen: false,
-      imgUrl: "",
       id: window.location.pathname.substring(5),
       commentTextArea: ""
     };
@@ -200,7 +201,7 @@ class BigCard extends Component {
   }
 
   handleVisit() {
-    window.open(this.state.imgUrl, "_blank");
+    window.open(this.props.pinData.imageURL, "_blank");
   }
 
   handleViewMoreComments(event) {
@@ -236,7 +237,8 @@ class BigCard extends Component {
               comment: {
                 commenterName: this.props.user.displayName,
                 commentText: this.state.commentTextArea,
-                postedOn: new Date().toDateString()
+                postedOn: new Date().toDateString(),
+                profilePic: this.props.user.profilePic
               },
               id: this.state.id
             })
@@ -272,9 +274,11 @@ class BigCard extends Component {
 
   render() {
     const tempImg =
-      this.props.pinData.imageURL === undefined
-        ? this.props.location.state.imgUrl
-        : this.props.pinData.imageURL;
+      this.props.pinData.imageURL !== undefined
+        ? this.props.pinData.imageURL
+        : this.props.location.state.imgUrl !== undefined
+          ? this.props.location.state.imgUrl
+          : "";
 
     let commentCount = 0;
     if (this.props.pinData.comments !== undefined) {

@@ -7,7 +7,14 @@ let pinSchema = new Schema({
   title: String,
   imageURL: String,
   description: String,
-  comments: [{ commenterName: String, commentText: String, postedOn: String }],
+  comments: [
+    {
+      commenterName: String,
+      commentText: String,
+      postedOn: String,
+      profilePic: String
+    }
+  ],
   creator: String,
   postedOn: String
 });
