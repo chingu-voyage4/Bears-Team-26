@@ -16,6 +16,10 @@ let me = require("./routes/me");
 let pins = require("./routes/pins");
 let app = express();
 
+//Sendgrid
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 let mongoose = require("mongoose");
 
 var uri ="mongodb://"+process.env.US+":"+process.env.PASS+"@ds127958.mlab.com:27958/bears26";
@@ -57,6 +61,7 @@ passport.use(
           return done(err);
         } else if (!result) {
           //If no user with that ID exists create a new profile.
+
           let new_user = new User({
             twitterID: profile.id,
             displayName: profile.displayName,
@@ -68,6 +73,15 @@ passport.use(
             if (err) {
               return done(err);
             } else {
+              const msg = {
+                to: 'jorlee92@gmail.com',
+                from: 'test@example.com',
+                subject: 'Welcome to Pintrest by Bears team 26',
+                text: 'lorem ipsum blah blah',
+                html: 'lorem ipsum blah bla lorem ipsum blah bla lorem ipsum blah bla',
+              };
+              sgMail.send(msg);
+              console.log("Sent welcome email");
               return done(null, res);
             }
           });

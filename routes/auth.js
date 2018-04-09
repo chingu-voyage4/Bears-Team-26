@@ -19,8 +19,6 @@ router.get(
     failureRedirect: "/login"
   }),
   (req, res, next) => {
-    //console.log(req.user);
-    //console.log(req.query);
     res.redirect("/");
   }
 );

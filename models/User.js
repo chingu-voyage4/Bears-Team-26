@@ -3,6 +3,8 @@ let Schema = mongoose.Schema;
 let findOrCreate = require("mongoose-findorcreate");
 let Pin = require("./Pin");
 
+
+
 let userSchema = new Schema({
   twitterID: String,
   displayName: String,
@@ -13,6 +15,7 @@ let userSchema = new Schema({
   followed_boards: [{ type: Schema.Types.ObjectId, ref: "Board" }],
   pins: [{ type: Schema.Types.ObjectId, ref: "Pin" }]
 });
+//afaik we arent using this anymore
 userSchema.plugin(findOrCreate);
 var User = mongoose.model("User", userSchema);
 module.exports = User;
