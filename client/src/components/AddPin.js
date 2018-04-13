@@ -9,9 +9,9 @@ import "../style/AddPin.css";
 import addImg from "../images/add.png";
 
 const checkImgUrl = url => {
-  const httpRegEx = /^http/;
-  const siteRegEx = /.\.com|.\.org|.\.net.\.gov/;
-  const imgRegEx = /\.jpg|jpeg|\.bmp|\.gif\.png/;
+  const httpRegEx = /^http/i;
+  const siteRegEx = /\.com|\.org|\.net|\.gov/i;
+  const imgRegEx = /\.jpg|jpeg|\.bmp|\.gif|\.png/i;
   return httpRegEx.test(url) && siteRegEx.test(url) && imgRegEx.test(url);
 };
 

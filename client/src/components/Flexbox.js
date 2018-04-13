@@ -36,8 +36,14 @@ const createCard = props => {
   return <Card key={id} id={id} imgUrl={imgUrl} />;
 };
 
-const Flexbox = props => {
-  return <div id="flexbox">{sampleCards.map(card => createCard(card))}</div>;
+class Flexbox extends Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render () {
+    return <div id="flexbox">{sampleCards.map(card => createCard(card))}</div>;
+  }
 };
 
 export default Flexbox;
