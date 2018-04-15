@@ -97,8 +97,17 @@ class AddPin extends React.Component {
       });
       const json = await response.json();
       const { result } = json;
+      const latestBoardResponse = await fetch("/boards/latest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          newPin: result
+        })
+      });
       return this.props.history.push({
-        pathname: `/pin/${result}`,
+        pathname: `/pin/${result._id}`,
         state: { imgUrl: imgURL }
       });
     } catch (err) {

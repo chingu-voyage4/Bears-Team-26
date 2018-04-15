@@ -20,6 +20,9 @@
     "url": "https://github.com/chingu-voyage4/Bears-Team-26/issues"
   },
   "homepage": "https://github.com/chingu-voyage4/Bears-Team-26#readme",
+  "nodemonConfig": {
+    "ignore": ["client/*"]
+  },
   "dependencies": {
     "@sendgrid/mail": "^6.2.1",
     "axios": "^0.18.0",
@@ -47,6 +50,8 @@
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",
     "ejs": "~2.5.7",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.7.0",
     "express": "~4.15.5",
     "express-session": "^1.15.6",
     "file-loader": "^1.1.11",

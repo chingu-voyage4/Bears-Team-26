@@ -35,7 +35,7 @@ router.post("/new", (req, res, next) => {
       return res.json({ err: err });
     } else {
       res.json({
-        result: result._id
+        result: result
       });
     }
   });

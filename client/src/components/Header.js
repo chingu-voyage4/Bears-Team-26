@@ -24,9 +24,7 @@ class Header extends React.Component {
       },
       credentials: "same-origin"
     })
-      .then(response => {
-        return response.json();
-      })
+      .then(response => response.json())
       .then(user => {
         user != null ? this.props.loginAction(user) : this.props.logoutAction();
       })
