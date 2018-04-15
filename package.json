@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/chingu-voyage4/Bears-Team-26#readme",
   "nodemonConfig": {
-    "ignore": ["client/*"]
+    "ignore": [
+      "client/*"
+    ]
   },
   "dependencies": {
     "@sendgrid/mail": "^6.2.1",
@@ -30,11 +32,13 @@
     "concurrently": "^3.5.1",
     "create-react-ref": "^0.1.0",
     "css-loader": "^0.28.10",
+    "image-size": "^0.6.2",
     "mongoose-findorcreate": "^3.0.0",
     "nodemon": "^1.17.2",
     "passport-twitter": "^1.0.4",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "request-image-size": "^2.1.0",
     "style-loader": "^0.20.2",
     "webpack": "^4.0.1"
   },

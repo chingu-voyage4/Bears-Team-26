@@ -16,7 +16,8 @@ let pinSchema = new Schema({
     }
   ],
   creator: String,
-  postedOn: String
+  postedOn: String,
+  options: [String]
 });
 
 var Pin = mongoose.model("Pin", pinSchema);

@@ -44,10 +44,19 @@
   background: rgba(0, 10, 25, 0.6);
 }
 
+.card--taller {
+  min-height: 400px;
+}
+
 @media (min-width: 480px) {
   .card {
     min-width: 120px;
     max-width: 200px;
     width: 40%;
   }
+
+  .card--wider {
+    min-width: 400px;
+  }
+
 }

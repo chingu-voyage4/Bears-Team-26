@@ -1,7 +1,7 @@
 #flexbox {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   background: #2a7dba;
   height: 100%;

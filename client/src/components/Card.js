@@ -111,9 +111,11 @@ class Card extends Component {
   render() {
     let urlLength =
       window.innerWidth >= 480 ? 25 : window.innerWidth >= 450 ? 45 : 34;
+    
+    const cardClasses = this.props.options.concat("card");
     return (
       <div
-        className={this.state.isHovering ? "card tinted" : "card"}
+        className={this.state.isHovering ? cardClasses.concat("tinted").join(" ") : cardClasses.join(" ")}
         onMouseOver={this.handleMouseHover}
         onMouseLeave={this.handleMouseExit}
         onClick={this.handleClick}

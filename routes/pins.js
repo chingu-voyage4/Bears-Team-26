@@ -3,10 +3,23 @@ var router = express.Router();
 let Pin = require("../models/Pin");
 let User = require("../models/User");
 var path = require("path");
+const requestImageSize = require('request-image-size');
 
-router.post("/new", (req, res, next) => {
+router.post("/new", async (req, res, next) => {
   //TODO: Require all fields before the post will work.
   const { title, imageURL, description, postedOn, creator } = req.body;
+  const size = await requestImageSize(imageURL);
+  const { height, width } = size;
+  let options = [];
+  if (height > 400 && height/width > 1.25) {
+    options.push("card--taller");
+  }
+  else if (width > 400 && width/height > 1.25) {
+    options.push("card--wider");
+  }
+  else if (width > 800 && height > 800 && width/height < 1.25) {
+    options.push("card--wider", "card--taller");
+  }
 
   let newPin = new Pin({
     likes: [],
@@ -16,7 +29,8 @@ router.post("/new", (req, res, next) => {
     description: description,
     comments: [],
     postedOn: postedOn,
-    creator: creator
+    creator: creator,
+    options: options
   });
   //creator: req.user._id
   //No user id on front end yet
@@ -34,11 +48,11 @@ router.post("/new", (req, res, next) => {
     if (err) {
       return res.json({ err: err });
     } else {
-      res.json({
-        result: result
-      });
+      res.json({ result: result });
     }
   });
+  
+  
 });
 
 router.delete("/:id", (err, res, next) => {

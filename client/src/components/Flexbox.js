@@ -4,8 +4,8 @@ import "../style/Flexbox.css";
 import Card from "./Card.js";
 
 const createCard = props => {
-  const { _id, imageURL } = props;
-  return <Card key={_id} id={_id} imgUrl={imageURL} />;
+  const { _id, imageURL, options } = props;
+  return <Card key={_id} id={_id} imgUrl={imageURL} options={options} />;
 };
 
 class Flexbox extends Component {
@@ -41,6 +41,7 @@ class Flexbox extends Component {
   }
   
   render () {
+    console.log(this.state.pins);
     return (this.state.pins)
     ? <div id="flexbox">{this.state.pins.map(card => createCard(card))}</div>
     : <div></div>;
