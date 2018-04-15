@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import "../style/Flexbox.css";
 import Card from "./Card.js";
+import Masonry from 'react-masonry-component';
 
 const createCard = props => {
   const { _id, imageURL, options } = props;
@@ -43,7 +44,10 @@ class Flexbox extends Component {
   render () {
     console.log(this.state.pins);
     return (this.state.pins)
-    ? <div id="flexbox">{this.state.pins.map(card => createCard(card))}</div>
+    ? <Masonry className="flexbox" 
+        options={{percentPosition: true}} >
+        {this.state.pins.map(card => createCard(card))}
+      </Masonry>
     : <div></div>;
   }
 };

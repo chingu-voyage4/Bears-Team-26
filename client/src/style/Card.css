@@ -60,3 +60,12 @@
   }
 
 }
+
+@media (max-width: 668px) {
+  .card {
+    max-height: 200px;
+  }
+  .card--taller {
+    min-width: 200px;
+  }
+}
