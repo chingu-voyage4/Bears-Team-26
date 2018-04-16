@@ -31,6 +31,45 @@ router.post('/', (req, res) => {
   });
 });
 
+router.post("/new", (req, res) => {
+  //Description: Create a Board
+  const {
+    title,
+    userID,
+    description,
+    image,
+    name,
+    privacy
+  } = req.body;
+
+  Board.createNew(
+    title,
+    userID, // creator
+    description,
+    image,
+    name,
+    privacy,
+    (err, result) => {
+      res.json({
+        err: err,
+        result: result
+      });
+
+      User.findByIdAndUpdate(userID, {
+        $push: {
+          boards: result._id
+        }
+      },
+      (err, user) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+  );
+
+});
+
 router.delete('/:id', (req, res) => {
   //Delete a Board
   let idToDelete = req.params.id;

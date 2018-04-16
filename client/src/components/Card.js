@@ -5,6 +5,7 @@ import { LikeButton, ShareButton } from "./Utils.js";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import Popup from "reactjs-popup";
 
 const ReportButton = styled.button`
   position: absolute;
@@ -54,8 +55,11 @@ class Card extends Component {
     this.handleMouseExit = this.handleMouseExit.bind(this);
     this.handleReport = this.handleReport.bind(this);
     this.handleVisit = this.handleVisit.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.createBoard = this.createBoard.bind(this);
     this.state = {
-      isHovering: false
+      isHovering: false,
+      likeBoxOpen: false,
     };
   }
 
@@ -73,11 +77,14 @@ class Card extends Component {
     };
   }
 
-  handleClick() {
-    return this.props.history.push({
-      pathname: `/pin/${this.props.id}`,
-      state: { imgUrl: this.props.imgUrl }
-    });
+  handleClick(e) {
+    if (e.target.className.indexOf("tinted") > -1) {
+      return this.props.history.push({
+        pathname: `/pin/${this.props.id}`,
+        state: { imgUrl: this.props.imgUrl }
+      });
+    }
+    
   }
 
   handleShare(event) {
@@ -86,12 +93,17 @@ class Card extends Component {
   }
 
   handleLike(event) {
+    event.stopPropagation();
     if (this.props.isAuthenticated) {
-      alert("TODO: Add Like events");
+      this.setState({likeBoxOpen: true});
     } else {
       alert("You must be logged in to like this Pin!");
     }
-    event.stopPropagation();
+    
+  }
+
+  closeModal () {
+    this.setState({ likeBoxOpen: false });
   }
 
   handleReport(e) {
@@ -108,59 +120,75 @@ class Card extends Component {
     window.open(this.props.imgUrl, "_blank");
   }
 
+  async createBoard() {
+    const response = await fetch("/boards/new", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: "Example",
+        description: "Some random text!",
+        image: "ThisShouldBeAURL",
+        name: "?",
+        privacy: true,
+        userID: this.props.user._id
+      })
+    });
+    const json = await response.json();
+    console.log(json);
+
+  }
+
   render() {
     let urlLength =
       window.innerWidth >= 480 ? 25 : window.innerWidth >= 450 ? 45 : 34;
     
     const cardClasses = this.props.options.concat("card");
-    return (
-      <div
-        className={this.state.isHovering ? cardClasses.concat("tinted").join(" ") : cardClasses.join(" ")}
-        onMouseOver={this.handleMouseHover}
-        onMouseLeave={this.handleMouseExit}
-        onClick={this.handleClick}
-        style={{ backgroundImage: `url(${this.props.imgUrl})` }}
-      >
-        {this.state.isHovering ? (
-          <span>
-            <ShareButton
-              onClick={this.handleShare}
-              onMouseOver={this.stopHoverPropagation}
-              onMouseLeave={this.handleMouseHover}
-            >
+    return <div className={this.state.isHovering ? cardClasses
+                .concat("tinted")
+                .join(
+                  " "
+                ) : cardClasses.join(" ")} onMouseOver={this.handleMouseHover} onMouseLeave={this.handleMouseExit} onClick={this.handleClick} style={{ backgroundImage: `url(${this.props.imgUrl})` }}>
+        {this.state.isHovering ? <span>
+            <ShareButton onClick={this.handleShare} onMouseOver={this.stopHoverPropagation} onMouseLeave={this.handleMouseHover}>
               <img src={share} height="100%" alt="Share!" />
             </ShareButton>
-            <LikeButton
-              onClick={this.handleLike}
-              onMouseOver={this.stopHoverPropagation}
-              onMouseLeave={this.handleMouseHover}
-            >
+            <LikeButton onMouseOver={this.stopHoverPropagation} onClick={this.handleLike} onMouseLeave={this.handleMouseHover}>
               Like!
             </LikeButton>
-            <TextLink
-              onClick={this.handleVisit}
-              onMouseOver={this.stopHoverPropagation}
-              onMouseLeave={this.handleMouseHover}
-            >
+            <TextLink onClick={this.handleVisit} onMouseOver={this.stopHoverPropagation} onMouseLeave={this.handleMouseHover}>
               {this.props.imgUrl.substring(0, urlLength)}
             </TextLink>
-            <ReportButton
-              onClick={this.handleReport}
-              onMouseOver={this.stopHoverPropagation}
-              onMouseLeave={this.handleMouseHover}
-            >
+            <ReportButton onClick={this.handleReport} onMouseOver={this.stopHoverPropagation} onMouseLeave={this.handleMouseHover}>
               !
             </ReportButton>
-          </span>
-        ) : null}
-      </div>
-    );
+          </span> : null}
+        <Popup open={this.state.likeBoxOpen} onClose={this.closeModal} closeOnDocumentClick>
+          <div>
+            Select a board:
+            <br/>
+            {
+              this.props.user.boards
+              ? this.props.user.boards.map(board => {
+                <li>{board}</li>;
+              })
+              : null
+            }
+            <br/>
+            Or Create a new Board :
+            <br/>
+            <button onClick={this.createBoard}>Click Me</button>
+          </div>
+        </Popup>
+      </div>;
   }
 }
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.isAuthenticated
+    isAuthenticated: state.isAuthenticated,
+    user: state.user
   };
 };
 

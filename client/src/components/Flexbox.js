@@ -19,7 +19,9 @@ class Flexbox extends Component {
   }
 
   componentWillMount() {
-    this.getLatestPins();
+    if (this.props.board === "latest") {
+      this.getLatestPins();
+    }
   }
 
   async getLatestPins () {
@@ -42,7 +44,6 @@ class Flexbox extends Component {
   }
   
   render () {
-    console.log(this.state.pins);
     return (this.state.pins)
     ? <Masonry className="flexbox" 
         options={{percentPosition: true}} >
