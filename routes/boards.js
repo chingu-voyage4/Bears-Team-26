@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 let User = require('../models/User');
-let Board = require('../models/Board')
+let Board = require('../models/Board');
+let Pin = require('../models/Pin');
 /* GET ALL Public Boards */
 router.get('/', function (req, res, next) {
   Board.find({
@@ -84,14 +85,24 @@ router.delete('/:id', (req, res) => {
 router.patch('/:id', (req, res) => {
   //Update a Board
   let idToChange = req.params.id;
-  Board.findByIdAndUpdate(idToChange, (err, changedDocument) => {
+  Pin.findById(req.body.pin, (err, foundPin) => {
+    if (err) {
+      return console.log(err);
+    }
+    Board.findByIdAndUpdate(
+    idToChange,
+    { $push: { pins: foundPin }},
+    { new: true },
+    (err, changedDocument) => {
 
-    //TODO: Finish implementing.
-    res.json({
-      err: err,
-      changedDocument: changedDocument
-    })
-  })
+      //TODO: Finish implementing.
+      res.json({
+        err: err,
+        changedDocument: changedDocument
+      });
+    });
+  });
+  
 })
 
 

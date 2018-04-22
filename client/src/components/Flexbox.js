@@ -3,8 +3,14 @@ import styled from "styled-components";
 import "../style/Flexbox.css";
 import Card from "./Card.js";
 import Masonry from 'react-masonry-component';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import {
+  retrievedPinsAction,
+  retrieveNewPinsAction
+} from "../store/actionTypes";
 
-const createCard = props => {
+const createCard = (props) => {
   const { _id, imageURL, options } = props;
   return <Card key={_id} id={_id} imgUrl={imageURL} options={options} />;
 };
@@ -13,14 +19,17 @@ class Flexbox extends Component {
   constructor(props) {
     super(props);
     this.getLatestPins = this.getLatestPins.bind(this);
+    this.getPinsByBoardID = this.getPinsByBoardID.bind(this);
     this.state = {
-      pins: []
+      pins: [],
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.board === "latest") {
       this.getLatestPins();
+    } else {
+      this.getPinsByBoardID();
     }
   }
 
@@ -35,6 +44,7 @@ class Flexbox extends Component {
       }
       });
       const json = await response.json();
+      this.props.retrievedPinsAction();
       return this.setState({
         pins: [...json.result]
       });
@@ -42,15 +52,58 @@ class Flexbox extends Component {
       alert("Could not retrieve latest pins!", err);
     }
   }
+
+  async getPinsByBoardID () {
+    const { match: { params } } = this.props;
+    const res = await fetch(`/boards/${params.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const json = await res.json();
+    if (json.err) {
+      alert("Error retrieving this board\'s pins", json.err);
+    }
+    this.props.retrievedPinsAction();
+    return this.setState({ pins: [...json.result.pins] });
+  }
   
   render () {
-    return (this.state.pins)
-    ? <Masonry className="flexbox" 
-        options={{percentPosition: true}} >
-        {this.state.pins.map(card => createCard(card))}
-      </Masonry>
-    : <div></div>;
+    const { match: { params } } = this.props;
+    if (params.id && !this.props.recentlyRetrievedPins) {
+      this.getPinsByBoardID();
+      return null;
+    } else if (!params.id && !this.props.recentlyRetrievedPins) {
+      this.getLatestPins();
+      return null;
+    } else {
+      if (this.state.pins) {
+        return (
+        <Masonry className="flexbox" options={{ percentPosition: true }}>
+          {[...this.state.pins.map(card => { 
+              return createCard(card);
+            })]}
+        </Masonry>
+        );
+      } else {
+        return null;
+      }
+    }
+    
   }
 };
 
-export default Flexbox;
+const mapStateToProps = state => {
+  return {
+    recentlyRetrievedPins: state.recentlyRetrievedPins
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    ...bindActionCreators({ retrievedPinsAction, retrieveNewPinsAction }, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(Flexbox);

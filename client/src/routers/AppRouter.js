@@ -14,6 +14,7 @@ const AppRouter = () => (
         <Route path="/" exact={true} render={props => <Flexbox board={"latest"} {...props} />} />
         <Route path="/pin/:pinID" render={props => <BigCard {...props} />} />
         <Route path="/newPin" component={AddPin} exact={true} />
+        <Route path="/board/:id" render={props => <Flexbox {...props} />} />
       </Switch>
       <Footer />
     </div>
