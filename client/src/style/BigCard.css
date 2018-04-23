@@ -1,0 +1,70 @@
+.bigCard {
+  min-width: 380px;
+  background: #e3eff0;
+  position: relative;
+  width: 85%;
+  margin: auto;
+  top: 50px;
+  height: 700px;
+  border: 1px solid rgba(0, 0, 0, 0);
+  box-shadow: 0 0 8px rgba(122, 140, 143, 0.8);
+  border-radius: 10px;
+  max-width: 650px;
+}
+
+.bigPic {
+  position: relative;
+  margin: auto;
+  margin-top: 60px;
+  width: 85%;
+  height: 40%;
+  max-height: 350px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 5px;
+}
+
+.title {
+  position: absolute;
+  font-family: "Alegreya", serif;
+  top: -5px;
+  left: 100px;
+  transition: all 0.4s;
+}
+
+.commentTextArea {
+  margin: 15px 0 0 20px;
+  width: 55%;
+}
+
+.profilePic {
+  height: 50px;
+  width: 50px;
+  border: 1px hidden;
+  border-radius: 50%;
+  margin-right: 5px;
+  float: left;
+}
+
+.commenterNameSpan {
+  padding: 0 5px 2px 5px;
+  font-size: 1.1em;
+  font-family: "Alegreya", serif;
+  font-weight: 600;
+  border-right: 1px solid rgba(122, 140, 143, 0.6);
+  border-bottom: 2px solid rgba(122, 140, 143, 0.6);
+  border-radius: 14px;
+  white-space: nowrap;
+  display: inline-block;
+  background: #d4e6e8;
+  color: rgb(55, 86, 116);
+  margin: 0 5px 2px 5px;
+}
+
+@media (min-width: 480px) {
+  .bigPic {
+    height: 50%;
+    margin-top: 12%;
+  }
+}
