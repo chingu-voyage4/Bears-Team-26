@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Redirect } from "react-router-dom";
+import { span, Redirect } from "react-router-dom";
 import logo from "../images/logo.png";
 import twitterLogo from "../images/TwitterLogo.png";
 import Navbar from "../style/Navbar.css";
@@ -7,32 +7,42 @@ import Login from "./Login";
 import Logout from "./Logout";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { loginAction, logoutAction } from "../store/actionTypes";
+import { loginAction, logoutAction, retrieveNewPinsAction } from "../store/actionTypes";
+import { withRouter } from "react-router-dom";
+
+function updateUserStatus() {
+  fetch("/me/loginCheck", {
+    method: "get",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Cache: "no-cache"
+    },
+    credentials: "same-origin"
+  })
+    .then(response => response.json())
+    .then(user => {
+      user != null ? this.props.loginAction(user) : this.props.logoutAction();
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
 
 class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.updateUserStatus = updateUserStatus.bind(this);
+    this.goHome = this.goHome.bind(this);
   }
 
   componentDidMount() {
-    fetch("/me/loginCheck", {
-      method: "get",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Cache: "no-cache"
-      },
-      credentials: "same-origin"
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(user => {
-        user != null ? this.props.loginAction(user) : this.props.logoutAction();
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.updateUserStatus();
+  }
+
+  goHome() {
+    this.props.retrieveNewPinsAction();
+    this.props.history.push("/");
   }
 
   render() {
@@ -40,10 +50,10 @@ class Header extends React.Component {
       <header>
         <div className="header-container">
           <div className="header-title">
-            <NavLink to="/">
+            <span onClick={this.goHome}>
               Pinterest
               <img className="logo" src={logo} />
-            </NavLink>
+            </span>
           </div>
           <div className="header-selection">
             {this.props.isAuthenticated ? <Login /> : <Logout />}
@@ -62,8 +72,8 @@ const mapStateToProps = reduxState => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    ...bindActionCreators({ loginAction, logoutAction }, dispatch)
+    ...bindActionCreators({ loginAction, logoutAction, retrieveNewPinsAction }, dispatch)
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

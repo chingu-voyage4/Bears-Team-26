@@ -9,9 +9,9 @@ import "../style/AddPin.css";
 import addImg from "../images/add.png";
 
 const checkImgUrl = url => {
-  const httpRegEx = /^http/;
-  const siteRegEx = /.\.com|.\.org|.\.net.\.gov/;
-  const imgRegEx = /\.jpg|jpeg|\.bmp|\.gif\.png/;
+  const httpRegEx = /^http/i;
+  const siteRegEx = /\.com|\.org|\.net|\.gov/i;
+  const imgRegEx = /\.jpg|jpeg|\.bmp|\.gif|\.png/i;
   return httpRegEx.test(url) && siteRegEx.test(url) && imgRegEx.test(url);
 };
 
@@ -97,8 +97,17 @@ class AddPin extends React.Component {
       });
       const json = await response.json();
       const { result } = json;
+      const latestBoardResponse = await fetch("/boards/latest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          newPin: result
+        })
+      });
       return this.props.history.push({
-        pathname: `/pin/${result}`,
+        pathname: `/pin/${result._id}`,
         state: { imgUrl: imgURL }
       });
     } catch (err) {

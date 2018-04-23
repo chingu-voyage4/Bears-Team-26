@@ -1,7 +1,8 @@
 const initialState = {
   isAuthenticated: false,
   pinData: {},
-  user: {}
+  user: {},
+  recentlyRetrievedPins: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -22,6 +23,24 @@ const reducer = (state = initialState, action) => {
         ...state,
         pinData: action.pinData
       };
+    case "GET_BOARDS":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          boards: action.boards
+        }
+      };
+    case "RECENTLY_RETRIEVED_PINS":
+      return {
+        ...state,
+        recentlyRetrievedPins: true
+      };
+    case "RETRIEVE_NEW_PINS":
+      return {
+        ...state,
+        recentlyRetrievedPins: false
+      }
     default:
       return state;
   }

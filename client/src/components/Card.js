@@ -5,6 +5,14 @@ import { LikeButton, ShareButton } from "./Utils.js";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import Popup from "reactjs-popup";
+import {
+  loginAction,
+  logoutAction,
+  getBoardDataAction
+} from "../store/actionTypes";
+import { bindActionCreators } from "redux";
+import BoardButton from "./BoardButton";
 
 const ReportButton = styled.button`
   position: absolute;
@@ -43,6 +51,21 @@ const TextLink = styled.button`
   }
 `;
 
+const getBoardTitle = async id => {
+  const res = await fetch(`/boards/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+  const json = await res.json();
+  if (json.err) {
+    return alert(err);
+  } else {
+    return json.result.title;
+  }
+};
+
 class Card extends Component {
   constructor(props) {
     super(props);
@@ -54,8 +77,16 @@ class Card extends Component {
     this.handleMouseExit = this.handleMouseExit.bind(this);
     this.handleReport = this.handleReport.bind(this);
     this.handleVisit = this.handleVisit.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.openBoardPopUp = this.openBoardPopUp.bind(this);
+    this.createNewBoard = this.createNewBoard.bind(this);
+    this.getBoardData = this.getBoardData.bind(this);
     this.state = {
-      isHovering: false
+      isHovering: false,
+      likeBoxOpen: false,
+      loadingBoards: false,
+      boardBoxOpen: false,
+      boards: []
     };
   }
 
@@ -73,11 +104,13 @@ class Card extends Component {
     };
   }
 
-  handleClick() {
-    return this.props.history.push({
-      pathname: `/pin/${this.props.id}`,
-      state: { imgUrl: this.props.imgUrl }
-    });
+  handleClick(e) {
+    if (e.target.className.indexOf("tinted") > -1) {
+      return this.props.history.push({
+        pathname: `/pin/${this.props.id}`,
+        state: { imgUrl: this.props.imgUrl }
+      });
+    }
   }
 
   handleShare(event) {
@@ -86,12 +119,17 @@ class Card extends Component {
   }
 
   handleLike(event) {
+    event.stopPropagation();
     if (this.props.isAuthenticated) {
-      alert("TODO: Add Like events");
+      this.setState({ likeBoxOpen: true });
+      this.getBoardData();
     } else {
       alert("You must be logged in to like this Pin!");
     }
-    event.stopPropagation();
+  }
+
+  closeModal() {
+    this.setState({ likeBoxOpen: false, boardBoxOpen: false });
   }
 
   handleReport(e) {
@@ -108,12 +146,70 @@ class Card extends Component {
     window.open(this.props.imgUrl, "_blank");
   }
 
+  openBoardPopUp() {
+    this.setState({ likeBoxOpen: false, boardBoxOpen: true });
+    this.createNewBoard();
+  }
+
+  async createNewBoard() {
+    console.log("Testing");
+    const response = await fetch("/boards/new", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: "Example",
+        description: "Some random text!",
+        image: "ThisShouldBeAURL",
+        name: "?",
+        privacy: true,
+        userID: this.props.user._id
+      })
+    });
+    const json = await response.json();
+    const board = json.result;
+    this.props.getBoardDataAction();
+    this.getBoardData();
+  }
+
+  //TODO Hoist Board Data to Flexbox rather than loading it for every card.
+
+  getBoardData() {
+    this.setState({ loadingBoards: true });
+    Promise.all(
+      this.props.user.boards.map(id => {
+        return Promise.resolve(getBoardTitle(id));
+      })
+    ).then(data => {
+      this.setState({
+        boards: data.map((title, i) => {
+          return (
+            <BoardButton
+              title={title}
+              id={this.props.user.boards[i]}
+              pin={this.props.id}
+              resetfn={this.props.resetfn}
+            />
+          );
+        }),
+        loadingBoards: false
+      });
+    });
+  }
+
   render() {
     let urlLength =
       window.innerWidth >= 480 ? 25 : window.innerWidth >= 450 ? 45 : 34;
+
+    const cardClasses = this.props.options.concat("card");
     return (
       <div
-        className={this.state.isHovering ? "card tinted" : "card"}
+        className={
+          this.state.isHovering
+            ? cardClasses.concat("tinted").join(" ")
+            : cardClasses.join(" ")
+        }
         onMouseOver={this.handleMouseHover}
         onMouseLeave={this.handleMouseExit}
         onClick={this.handleClick}
@@ -129,8 +225,8 @@ class Card extends Component {
               <img src={share} height="100%" alt="Share!" />
             </ShareButton>
             <LikeButton
-              onClick={this.handleLike}
               onMouseOver={this.stopHoverPropagation}
+              onClick={this.handleLike}
               onMouseLeave={this.handleMouseHover}
             >
               Like!
@@ -151,6 +247,43 @@ class Card extends Component {
             </ReportButton>
           </span>
         ) : null}
+        <Popup
+          open={this.state.likeBoxOpen}
+          onClose={this.closeModal}
+          closeOnDocumentClick
+        >
+          <div>
+            Select a board:
+            <br />
+            <div className="boardSelectorDiv">
+              {this.state.loadingBoards ? (
+                <div className="spinner">
+                  <div className="double-bounce1" />
+                  <div className="double-bounce2" />
+                </div>
+              ) : null}
+              {this.state.boards ? this.state.boards : null}
+            </div>
+            <br />
+            Or Create a new Board :
+            <br />
+            <button onClick={this.openBoardPopUp}>Click Me</button>
+          </div>
+        </Popup>
+        <Popup
+          open={this.state.boardBoxOpen}
+          onClose={this.closeModal}
+          closeOnDocumentClick
+        >
+          <div>
+            <div className="boardSelectorDiv" >
+            <label>Title</label>
+            <input type="text"/>
+            </div>
+            <label> Create Board! </label>
+            <button onClick={this.createNewBoard} />
+          </div>
+        </Popup>
       </div>
     );
   }
@@ -158,8 +291,18 @@ class Card extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.isAuthenticated
+    isAuthenticated: state.isAuthenticated,
+    user: state.user
   };
 };
 
-export default connect(mapStateToProps)(withRouter(Card));
+const mapDispatchToProps = dispatch => {
+  return {
+    ...bindActionCreators(
+      { loginAction, logoutAction, getBoardDataAction },
+      dispatch
+    )
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Card));
