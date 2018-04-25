@@ -1,17 +1,12 @@
 {
   "name": "Bears-Team-26",
   "version": "1.0.0",
-  "private": true,
   "description": "Voyage-4",
   "main": "app.js",
   "scripts": {
     "start": "concurrently \"npm run build --prefix client/\" \"nodemon ./bin/www\"",
     "build": "webpack --mode production",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chingu-voyage4/Bears-Team-26.git"
   },
   "keywords": [],
   "author": "",
