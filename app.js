@@ -22,7 +22,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 let mongoose = require("mongoose");
 
-var uri ="mongodb://team:bigbear26@ds127958.mlab.com:27958/bears26";
+var uri ="mongodb://"+process.env.US+":"+process.env.PASS+"@ds127958.mlab.com:27958/bears26";
 mongoose.connect(uri).catch(err => {
   console.log("Could not connect to MongoDB!", err.message);
 });
@@ -41,8 +41,8 @@ app.use(
 // models
 let User = require("./models/User");
 // passport config
-const TWITTER_CONSUMER_KEY = "IxfaDqPyPym9BodRHOoIDPvWd";
-const TWITTER_CONSUMER_SECRET = "4wl7kYnTYoHzKFi2gZye5RPhXQcks4PXdG3kOayA3WiAAbOMDW";
+const TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY;
+const TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET;
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -86,7 +86,6 @@ passport.use(
             }
           });
         } else if (result) {
-          console.log("here..")
           return done(null, result);
         }
       });
