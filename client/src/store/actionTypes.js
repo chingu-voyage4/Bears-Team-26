@@ -38,8 +38,53 @@ const getPinDataAction = function(id) {
   };
 };
 
+const fetchBoardData = async function() {
+  const boards = await fetch("/me/boards", {
+    method: "get",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Cache: "no-cache"
+    },
+    credentials: "same-origin"
+  });
+  const json = boards.json();
+  return json;
+};
+
+const setBoardData = boards => {
+  return {
+    type: "GET_BOARDS",
+    boards: boards.result
+  };
+};
+
+const getBoardDataAction = function() {
+  return function(dispatch) {
+    return fetchBoardData().then(
+      data => dispatch(setBoardData(data)),
+      err => console.log(err)
+    );
+  };
+};
+
+const retrievedPinsAction = () => {
+  return {
+    type: "RECENTLY_RETRIEVED_PINS"
+  };
+}
+
+const retrieveNewPinsAction = () => {
+  return {
+    type: "RETRIEVE_NEW_PINS"
+  };
+}
+
 module.exports = {
   logoutAction,
   getPinDataAction,
-  loginAction
+  loginAction,
+  getBoardDataAction,
+  retrievedPinsAction,
+  retrieveNewPinsAction
 };

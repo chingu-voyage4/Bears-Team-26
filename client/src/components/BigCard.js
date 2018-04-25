@@ -9,6 +9,7 @@ import Lightbox from "react-image-lightbox";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getPinDataAction } from "../store/actionTypes";
+import createRef from "create-react-ref/lib/createRef";
 
 const VisitButton = styled.button`
   position: relative;
@@ -174,6 +175,7 @@ class BigCard extends Component {
     this.handleAddComment = this.handleAddComment.bind(this);
     this.handleExpandPicture = this.handleExpandPicture.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.commentRef = createRef();
     this.state = {
       commentsVisible: false,
       lightboxOpen: false,
@@ -247,6 +249,8 @@ class BigCard extends Component {
           if (json.message) {
             this.getPinData();
           }
+          this.setState({commentTextArea: ""});
+          this.commentRef.current.value = "";
         } catch (err) {
           console.log(err);
         }
@@ -340,6 +344,7 @@ class BigCard extends Component {
                     className="commentTextArea"
                     name="commentTextArea"
                     onChange={this.handleInputChange}
+                    ref={this.commentRef}
                   />
                 </span>
                 <AddCommentButton onClick={this.handleAddComment}>

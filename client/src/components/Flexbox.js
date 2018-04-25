@@ -2,42 +2,108 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import "../style/Flexbox.css";
 import Card from "./Card.js";
+import Masonry from 'react-masonry-component';
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import {
+  retrievedPinsAction,
+  retrieveNewPinsAction
+} from "../store/actionTypes";
 
-const sampleCards = [
-  {
-    id: 0,
-    imgUrl:
-      "https://static.boredpanda.com/blog/wp-content/uploads/2016/09/mother-bear-cubs-animal-parenting-21-57e3a2161d7f7__880.jpg"
-  },
-  {
-    id: 1,
-    imgUrl:
-      "http://4.bp.blogspot.com/-ZQPQ9HhdEGw/U8gTj5Kt3nI/AAAAAAABBAE/9HGHGYhJRTY/s1600/cute-red-panda-04.jpg"
-  },
-  {
-    id: 2,
-    imgUrl:
-      "https://tse1.mm.bing.net/th?id=OIP.NhV4BAbXK-KtznZSsbygMQHaE2&pid=Api"
-  },
-  {
-    id: 3,
-    imgUrl:
-      "http://3.bp.blogspot.com/-DiuhxcjAZQM/TmOZWHcPJzI/AAAAAAAAAzU/DXHiYryXZ5M/s1600/red_panda_1.jpg"
-  },
-  {
-    id: 4,
-    imgUrl:
-      "https://tse2.mm.bing.net/th?id=OIP.wyttLcrLj-6GpJkulGaqigHaKw&pid=Api"
+const createCard = (props) => {
+  const { _id, imageURL, options } = props;
+  return <Card key={_id} id={_id} imgUrl={imageURL} options={options} />;
+};
+
+class Flexbox extends Component {
+  constructor(props) {
+    super(props);
+    this.getLatestPins = this.getLatestPins.bind(this);
+    this.getPinsByBoardID = this.getPinsByBoardID.bind(this);
+    this.state = {
+      pins: [],
+    };
   }
-];
 
-const createCard = props => {
-  const { id, imgUrl } = props;
-  return <Card key={id} id={id} imgUrl={imgUrl} />;
+  componentDidMount() {
+    if (this.props.board === "latest") {
+      this.getLatestPins();
+    } else {
+      this.getPinsByBoardID();
+    }
+  }
+
+  async getLatestPins () {
+    try {
+      // I tried a GET request but it didn't work, and I'm not sure why.
+      // Currently returns the newest 100 pins
+      const response = await fetch('/boards/latestInfo', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+      });
+      const json = await response.json();
+      this.props.retrievedPinsAction();
+      return this.setState({
+        pins: [...json.result]
+      });
+    } catch (err) {
+      alert("Could not retrieve latest pins!", err);
+    }
+  }
+
+  async getPinsByBoardID () {
+    const { match: { params } } = this.props;
+    const res = await fetch(`/boards/${params.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const json = await res.json();
+    if (json.err) {
+      alert("Error retrieving this board\'s pins", json.err);
+    }
+    this.props.retrievedPinsAction();
+    return this.setState({ pins: [...json.result.pins] });
+  }
+  
+  render () {
+    const { match: { params } } = this.props;
+    if (params.id && !this.props.recentlyRetrievedPins) {
+      this.getPinsByBoardID();
+      return null;
+    } else if (!params.id && !this.props.recentlyRetrievedPins) {
+      this.getLatestPins();
+      return null;
+    } else {
+      if (this.state.pins) {
+        return (
+        <Masonry className="flexbox" options={{ percentPosition: true }}>
+          {[...this.state.pins.map(card => { 
+              return createCard(card);
+            })]}
+        </Masonry>
+        );
+      } else {
+        return null;
+      }
+    }
+    
+  }
 };
 
-const Flexbox = props => {
-  return <div id="flexbox">{sampleCards.map(card => createCard(card))}</div>;
+const mapStateToProps = state => {
+  return {
+    recentlyRetrievedPins: state.recentlyRetrievedPins
+  };
 };
 
-export default Flexbox;
+const mapDispatchToProps = dispatch => {
+  return {
+    ...bindActionCreators({ retrievedPinsAction, retrieveNewPinsAction }, dispatch)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(Flexbox);

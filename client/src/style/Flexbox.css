@@ -1,16 +1,4 @@
-#flexbox {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-around;
-  align-items: center;
+.flexbox {
   background: #2a7dba;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
-@media (min-width: 664px) {
-  #flexbox {
-    align-content: flex-start;
-  }
+  min-width: 277px;
 }

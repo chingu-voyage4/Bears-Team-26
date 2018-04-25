@@ -27,9 +27,9 @@
 
 .title {
   position: absolute;
-  margin: 20px 200px 10px 100px;
   font-family: "Alegreya", serif;
   top: -5px;
+  left: 100px;
   transition: all 0.4s;
 }
 
@@ -66,11 +66,5 @@
   .bigPic {
     height: 50%;
     margin-top: 12%;
-  }
-}
-
-@media (min-width: 540px) {
-  .title {
-    margin: 20px 200px 5px 150px;
   }
 }
