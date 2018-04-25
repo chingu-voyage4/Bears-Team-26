@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Voyage-4",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "concurrently \"npm run build --prefix client/\" \"nodemon ./bin/www\"",
     "build": "webpack --mode production",
