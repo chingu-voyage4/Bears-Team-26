@@ -7,7 +7,7 @@
   "scripts": {
     "start": "concurrently \"npm run build --prefix client/\" \"nodemon ./bin/www\"",
     "build": "webpack --mode production",
-    "postinstall": "cd client && npm install --only=dev && npm install"
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "repository": {
     "type": "git",
